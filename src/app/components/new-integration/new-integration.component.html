@@ -8,11 +8,11 @@
             </div>
             <div class="col-span-1 flex flex-col justify-center m-2">
                 <label>Planned Budget(e)</label>
-                <input class="border rounded p-1" [(ngModel)]="amountBudget" placeholder="50000" />
+                <input class="border rounded p-1" [(ngModel)]="amountBudget" (ngModelChange)="updateValuesByBudget()" placeholder="50000" />
             </div>
             <div class="col-span-1 flex flex-col justify-center m-2 mr-5">
                 <label>No. Participants</label>
-                <input class="border rounded p-1" [(ngModel)]="percentBudget" placeholder="59" />
+                <input class="border rounded p-1" [(ngModel)]="noParticipant" placeholder="59" />
             </div>
         </div>
         <div class="col-span-2 row-span-4 shadow rounded flex flex-col p-8">
@@ -48,20 +48,23 @@
             </div>
             <div class="h-[30%] p-5" *ngIf="showAddingCategory">
                 <h2 class="pl-5">New Category</h2>
-                <div class="flex flex-row">
+                <div class="grid grid-cols-4">
                     <div class="flex flex-col m-5">
                         <label>Name</label>
                         <input class="border rounded p-1" [(ngModel)]="nameCategory"  type="text" placeholder="Ex. Hotel">
                     </div>
                     <div class="flex flex-col m-5">
                         <label>Percent</label>
-                        <input class="border rounded p-1" [(ngModel)]="percentCategory" type="text" placeholder="Ex. 50%">
+                        <input class="border rounded p-1" [(ngModel)]="percentCategory" (ngModelChange)="updateValuesByPercentCategory()" type="text" placeholder="Ex. 50%">
                     </div>
                     <div class="flex flex-col m-5">
                         <label>Amount</label>
-                        <input class="border rounded p-1" [(ngModel)]="amountCategory" type="text" placeholder="Ex. 20000">
+                        <input class="border rounded p-1" [(ngModel)]="amountCategory" (ngModelChange)="updateValuesByCostCategory()" type="text" placeholder="Ex. 20000">
                     </div>
-                    <button class="m-5 px-5 rounded border hover:bg-purple-900/20">Add</button>
+                    <div class="flex items-end justify-center m-5">
+                        <button (click)="addCategory()" class="px-5 py-2 rounded border hover:bg-purple-900/20">Add</button>
+                    </div>
+                    
                 </div>
             </div>
             <div class="align-end border-t p-3">
@@ -74,6 +77,6 @@
     </div>
     <div class="flex justify-between mt-3">
         <button routerLink="/home" class=" ml-12 p-3 rounded bg-purple-900/80 text-white flex items-center" ><mat-icon class="text-white">navigate_before</mat-icon>Back</button>
-        <div class=" mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></div>
+        <button routerLink="/details" class=" mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
     </div>
 </div>

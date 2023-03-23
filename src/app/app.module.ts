@@ -9,9 +9,12 @@ import { HomeComponent } from './components/home/home.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from './components/home/dialog/dialog.component';
 import { MatIconModule } from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { NewIntegrationComponent } from './components/new-integration/new-integration.component';
 import { FormsModule } from '@angular/forms';
+import { IntegrationDetailsComponent } from './components/integration-details/integration-details.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +22,7 @@ import { FormsModule } from '@angular/forms';
     HomeComponent,
     DialogComponent,
     NewIntegrationComponent,
+    IntegrationDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,7 +31,8 @@ import { FormsModule } from '@angular/forms';
     MatIconModule,
     MatInputModule, 
     MatTableModule,
-    FormsModule
+    FormsModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

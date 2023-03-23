@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTable } from '@angular/material/table';
 
 
 export interface expense {
@@ -8,19 +10,10 @@ export interface expense {
   percent: number;
 }
 
-const EXPENSES: expense[] = [
-  { category: 'Hotel', amount: 10000, percent: 10 },
-  { category: 'Transport', amount: 3000, percent: 3 },
-  { category: 'Hotel', amount: 5000, percent: 5 },
-  
-  { category: 'Hotel', amount: 10000, percent: 10 },
-  { category: 'Transport', amount: 3000, percent: 3 },
-  { category: 'Hotel', amount: 5000, percent: 5 },
-  
-  { category: 'Hotel', amount: 10000, percent: 10 },
-  { category: 'Transport', amount: 3000, percent: 3 },
-  { category: 'Hotel', amount: 5000, percent: 5 },
-  
+export const EXPENSES: expense[] = [
+  {category: "Hotel", amount: 20000, percent: 40},
+  {category: "Food", amount: 10000, percent: 20},
+  {category: "Transport", amount: 5000, percent: 10},
 ];
 
 @Component({
@@ -29,18 +22,35 @@ const EXPENSES: expense[] = [
   styleUrls: ['./new-integration.component.css']
 })
 export class NewIntegrationComponent {
-  nameBudget?:string;
-  amountBudget?:number;
-  percentBudget?:number;
-  nameCategory?:string;
-  amountCategory?:number;
-  percentCategory?:number;
+
+  @ViewChild(MatTable) table?: MatTable<any>;
+
+  nameBudget!:string;
+  amountBudget!:number;
+  noParticipant!:number;
+  nameCategory!:string;
+  amountCategory!:number;
+  percentCategory!:number;
   showAddingCategory?:boolean = true;
   displayedColums: string[] = ['Category', 'Amount', 'Percent'];
   dataSource = EXPENSES;
 
 
+  updateValuesByBudget = () => {
+    this.percentCategory = this.amountCategory/this.amountBudget * 100;
+  }
+
+  updateValuesByCostCategory = () => {
+    this.percentCategory = this.amountCategory/this.amountBudget * 100;
+  }
+
+  updateValuesByPercentCategory = () => {
+    this.amountCategory = this.percentCategory/100 * this.amountBudget;
+  }
+
   addCategory = () => {
-    
+    EXPENSES.push({category: this.nameCategory, amount: this.amountCategory, percent: this.percentCategory})
+    this.table?.renderRows();
+    this.showAddingCategory = false;
   };
 }
