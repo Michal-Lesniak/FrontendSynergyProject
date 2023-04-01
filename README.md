@@ -1,6 +1,7 @@
 # SynergyProject
 
 Project to create budget for integration.
+App is static, in Future it will be converted to dynamics, fetching data from endpoints created in BackendSynergyProject.
 
 ## Development server
 
