@@ -25,27 +25,32 @@ export class NewIntegrationComponent {
 
   @ViewChild(MatTable) table?: MatTable<any>;
 
-  nameBudget!:string;
-  amountBudget!:number;
+  nameVersion!:string;
+  amountVersion!:number;
+
   noParticipant!:number;
+  integrationName!:string
+
   nameCategory!:string;
   amountCategory!:number;
   percentCategory!:number;
+
   showAddingCategory?:boolean = true;
   displayedColums: string[] = ['Category', 'Amount', 'Percent'];
+  
   dataSource = EXPENSES;
 
 
   updateValuesByBudget = () => {
-    this.percentCategory = this.amountCategory/this.amountBudget * 100;
+    this.percentCategory = this.amountCategory/this.amountVersion * 100;
   }
 
   updateValuesByCostCategory = () => {
-    this.percentCategory = this.amountCategory/this.amountBudget * 100;
+    this.percentCategory = this.amountCategory/this.amountVersion * 100;
   }
 
   updateValuesByPercentCategory = () => {
-    this.amountCategory = this.percentCategory/100 * this.amountBudget;
+    this.amountCategory = this.percentCategory/100 * this.amountVersion;
   }
 
   addCategory = () => {

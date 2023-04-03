@@ -14,6 +14,8 @@ import { NewIntegrationComponent } from './components/new-integration/new-integr
 import { FormsModule } from '@angular/forms';
 import { IntegrationDetailsComponent } from './components/integration-details/integration-details.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { HttpClientModule } from '@angular/common/http';
+import { DisplayIntegrationComponent } from './components/display-integration/display-integration.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +25,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     DialogComponent,
     NewIntegrationComponent,
     IntegrationDetailsComponent,
+    DisplayIntegrationComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatInputModule, 
     MatTableModule,
     FormsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

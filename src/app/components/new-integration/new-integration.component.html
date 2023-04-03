@@ -4,11 +4,11 @@
         <div class="col-span-3 row-span-1 shadow rounded grid grid-cols-4">
             <div class="col-span-2 flex flex-col justify-center m-5">
                 <label>Name Budget</label>
-                <input class="border rounded p-1" [(ngModel)]="nameBudget" placeholder="Version 1" />
+                <input class="border rounded p-1" [(ngModel)]="nameVersion" placeholder="Version 1" />
             </div>
             <div class="col-span-1 flex flex-col justify-center m-2">
                 <label>Planned Budget(e)</label>
-                <input class="border rounded p-1" [(ngModel)]="amountBudget" (ngModelChange)="updateValuesByBudget()" placeholder="50000" />
+                <input class="border rounded p-1" [(ngModel)]="amountVersion" (ngModelChange)="updateValuesByBudget()" placeholder="50000" />
             </div>
             <div class="col-span-1 flex flex-col justify-center m-2 mr-5">
                 <label>No. Participants</label>
@@ -18,7 +18,7 @@
         <div class="col-span-2 row-span-4 shadow rounded flex flex-col p-8">
            <div class="font-bold text-xl px-5">Info & Photo</div>
            
-            <input class="p-5 border rounded m-5 flex flex-col" matInput placeholder="Integration 2023">
+            <input class="p-5 border rounded m-5 flex flex-col" [(ngModel)]="integrationName" matInput placeholder="Integration 2023">
             <button class="flex-1 bg-purple-900/20 rounded m-5" >
                 <div class="h-[70%] flex items-center justify-center">
                     <mat-icon class="scale-[7] text-white">cloud_upload</mat-icon>
@@ -77,6 +77,6 @@
     </div>
     <div class="flex justify-between mt-3">
         <button routerLink="/home" class=" ml-12 p-3 rounded bg-purple-900/80 text-white flex items-center" ><mat-icon class="text-white">navigate_before</mat-icon>Back</button>
-        <button routerLink="/details" class=" mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
+        <button routerLink="/integration/details" class=" mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
     </div>
 </div>

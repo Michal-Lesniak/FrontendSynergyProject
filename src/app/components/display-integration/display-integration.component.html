@@ -1,0 +1,22 @@
+<div class="h-screen flex-1 flex justify-center items-center flex-col">
+    <div class="font-bold">
+        Website Under Construction
+    </div>
+    <div class="text-center">
+        Name: {{integration?.name}}
+    </div>
+    <div>
+        Budget: {{integration?.budget}}
+    </div>
+    <div>
+        NoParticipant: {{integration?.noOfMembers}}
+    </div>
+    <div *ngFor="let version of listVersion">
+        {{version.name}} 
+        {{version.id}}
+        {{version.percentOfSpendBudget}}
+    </div>
+    <div>
+        <img [src]="this.srcImage" alt="">
+    </div>
+</div>

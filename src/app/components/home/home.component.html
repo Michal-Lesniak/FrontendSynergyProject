@@ -1,11 +1,11 @@
 <div class="flex flex-col ">
     <app-header></app-header>
     <div class="text-black text-5xl font-extrabold text-start px-24 py-12">Wybierz edycję integracji </div>
-    <div class="grid grid-cols-3 gap-24 p-28 ">
-        <button class="grid grid-cols-3 rounded overflow-hidden shadow" *ngFor="let item of items">
+    <div class="grid grid-cols-3 gap-24 p-28">
+        <button [routerLink]="['/',integration.name]" [state]="{id: integration.id}"  class="grid grid-cols-3 rounded overflow-hidden shadow" *ngFor="let integration of integrations">
             <img class="col-span-1" src="../../../assets/default.png" alt=""/>
-            <div class="col-span-2 m-auto">{{item}}</div>
+            <div class="col-span-2 m-auto">{{integration.name}}</div>
         </button>
-        <button class="rounded shadow" (click)="openDialog()">Add new</button>
+        <button class="rounded shadow h-24" (click)="openDialog()">Add new</button>
     </div>
 </div>
