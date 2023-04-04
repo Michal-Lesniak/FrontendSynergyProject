@@ -8,6 +8,7 @@ import { VersionBudget } from 'src/app/models/versionBudget';
 import { ImageService } from 'src/app/services/image/image.service';
 import { IntegrationService } from 'src/app/services/integration/integration.service';
 
+
 @Component({
   selector: 'app-display-integration',
   templateUrl: './display-integration.component.html',
@@ -39,6 +40,6 @@ export class DisplayIntegrationComponent implements OnInit {
       this.listVersion = res;
     });
 
-    this.imageService.getImageById(1);
-  }
+ 
+}
 }
