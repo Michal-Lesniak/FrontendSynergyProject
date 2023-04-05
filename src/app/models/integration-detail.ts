@@ -1,7 +1,7 @@
 import { VersionBudget } from "./versionBudget";
 
 export interface IntegrationDetail {
-    id:number;
+    id?:number;
     name:string;
     budget: number;
     noOfMembers: string;

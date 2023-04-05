@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatProgressBar } from '@angular/material/progress-bar';
-import { EXPENSES } from '../new-integration/new-integration.component';
-import { expense } from '../new-integration/new-integration.component';
+import { ExpenseCategory } from 'src/app/models/expense-category';
+
 
  export interface subcategory{
     name: string,
@@ -19,5 +19,5 @@ export class IntegrationDetailsComponent {
   integrationName:string = "Integracja 2023";
   inputNameVersion:boolean = true;
   percent:number = 73;
-  exampleData: expense[] = EXPENSES;
+  exampleData: ExpenseCategory[] = [];
 }

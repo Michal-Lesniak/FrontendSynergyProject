@@ -1,5 +1,5 @@
-import { map } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from './dialog/dialog.component';
 import { IntegrationService } from 'src/app/services/integration/integration.service';
@@ -15,8 +15,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class HomeComponent implements OnInit{
 
-  constructor(public dialog:MatDialog, private integrationService:IntegrationService, private imageService: ImageService, private sanitizer: DomSanitizer){}
+  @ViewChild("newIntegratioButton") newIntegrationButton!:ElementRef; 
 
+  constructor(public dialog:MatDialog, 
+    private integrationService:IntegrationService, 
+    private imageService: ImageService, 
+    private sanitizer: DomSanitizer ){}
+ 
   public integrations?:Integration[];
 
 
@@ -24,9 +29,11 @@ export class HomeComponent implements OnInit{
     this.integrationService.getIntegrations().subscribe( res => {this.integrations = res; this.setImagesToIntegration()});
   }
 
+  
+
   private setImagesToIntegration(): void {
     this.integrations?.forEach(integration => {
-      this.imageService.getImageById(integration.id).subscribe(data => {   
+      this.imageService.getImageById(integration.id!).subscribe(data => {   
         const blob = new Blob([data], { type: 'blob' }); // Create a Blob object from the image data
         const url = window.URL.createObjectURL(blob); // Generate a URL for the Blob object
         integration.srcImage = this.sanitizer.bypassSecurityTrustUrl(url); 

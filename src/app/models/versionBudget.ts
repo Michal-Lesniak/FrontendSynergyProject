@@ -1,5 +1,5 @@
 export interface VersionBudget {
-    id:number;
+    id?:number;
     name: string;
     percentOfSpendBudget: number;
 }

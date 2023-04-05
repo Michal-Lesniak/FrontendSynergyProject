@@ -26,10 +26,10 @@
                         <button class="p-3"><mat-icon>expand_more</mat-icon></button>
                         <div class="flex-1 grid grid-rows-2">
                             <div class="flex flex-rows justify-between">
-                                <div>{{item.category}}</div>
-                                <div>{{item.percent}}% ({{item.amount * item.percent/100}} / {{item.amount}}e )</div>
+                                <div>{{item.name}}</div>
+                                <div>{{item.spendPercentOfBudgetCategory}}% ({{item.fullCost * item.spendPercentOfBudgetCategory/100}} / {{item.fullCost}}e )</div>
                             </div>
-                            <mat-progress-bar mode="determinate" value={{item.percent}}></mat-progress-bar>
+                            <mat-progress-bar mode="determinate" value={{item.spendPercentOfBudgetCategory}}></mat-progress-bar>
                         </div>
                         <button class="p-3 text-purple-900/80"><mat-icon>add_circle</mat-icon></button>
                     </div>

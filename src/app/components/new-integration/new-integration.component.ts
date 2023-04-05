@@ -1,34 +1,34 @@
-import { Component, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { JsonPipe } from '@angular/common';
+import { Version } from '@angular/compiler';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgModel, NumberValueAccessor } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTable } from '@angular/material/table';
+import { ExpenseCategory } from 'src/app/models/expense-category';
+import { Integration } from 'src/app/models/integration';
+import { IntegrationDetail } from 'src/app/models/integration-detail';
 
 
-export interface expense {
-  category: string;
-  amount: number;
-  percent: number;
-}
-
-export const EXPENSES: expense[] = [
-  {category: "Hotel", amount: 20000, percent: 40},
-  {category: "Food", amount: 10000, percent: 20},
-  {category: "Transport", amount: 5000, percent: 10},
-];
 
 @Component({
   selector: 'app-new-integration',
   templateUrl: './new-integration.component.html',
   styleUrls: ['./new-integration.component.css']
 })
-export class NewIntegrationComponent {
+export class NewIntegrationComponent implements OnInit{
+
 
   @ViewChild(MatTable) table?: MatTable<any>;
 
-  nameVersion!:string;
-  amountVersion!:number;
+  integration?:IntegrationDetail;
+  version?:Version;
+  srcImage?:any;
+  listCategory?: ExpenseCategory[] = [];
 
+  nameVersion!:string;
+  
   noParticipant!:number;
+  integrationBudget!:number;
   integrationName!:string
 
   nameCategory!:string;
@@ -38,24 +38,76 @@ export class NewIntegrationComponent {
   showAddingCategory?:boolean = true;
   displayedColums: string[] = ['Category', 'Amount', 'Percent'];
   
-  dataSource = EXPENSES;
 
-
-  updateValuesByBudget = () => {
-    this.percentCategory = this.amountCategory/this.amountVersion * 100;
+  ngOnInit(): void {
+    if(sessionStorage.getItem('integrationName') !== null ){
+      this.listCategory = JSON.parse(sessionStorage.getItem("listCategory")!);
+    }
+    this.integrationName = sessionStorage.getItem('integrationName')!;
+    this.integrationBudget = JSON.parse(sessionStorage.getItem('integrationBudget')!);
+    this.noParticipant = JSON.parse(sessionStorage.getItem('integrationNoParticipant')!);
+    this.nameVersion = sessionStorage.getItem('versionName')!;
   }
 
-  updateValuesByCostCategory = () => {
-    this.percentCategory = this.amountCategory/this.amountVersion * 100;
+
+
+  addVersionNameToSessionStorage(){
+    if(sessionStorage.getItem("versionName") !== null ){
+      sessionStorage.removeItem("versionName");
+    }
+    sessionStorage.setItem("versionName", this.nameVersion);
   }
 
-  updateValuesByPercentCategory = () => {
-    this.amountCategory = this.percentCategory/100 * this.amountVersion;
+  addIntegrationBudgetToSessionStorage(){
+    if(sessionStorage.getItem("integrationBudget") !== null ){
+      sessionStorage.removeItem("integrationBudget");
+    }
+    sessionStorage.setItem("integrationBudget", JSON.stringify(this.integrationBudget));
+  }
+
+  addIntegrationNoParticipantToSesstionStorage(){
+    if(sessionStorage.getItem("integrationNoParticipant") !== null ){
+      sessionStorage.removeItem("integrationNoParticipant");
+    }
+    sessionStorage.setItem("integrationNoParticipant", JSON.stringify(this.noParticipant));
+  }
+
+
+  addIntegrationNameToSessionStorage() {
+    if(sessionStorage.getItem("integrationName") !== null){
+      sessionStorage.removeItem("integrationName");
+    }
+    sessionStorage.setItem("integrationName", this.integrationName);
+  }
+
+  addListCategoryToSessionStorage(){
+    if(sessionStorage.getItem("listCategory") !== null){ 
+      sessionStorage.removeItem("listCategory");
+    }
+    sessionStorage.setItem("listCategory", JSON.stringify(this.listCategory));
   }
 
   addCategory = () => {
-    EXPENSES.push({category: this.nameCategory, amount: this.amountCategory, percent: this.percentCategory})
+    this.listCategory?.push({name: this.nameCategory, fullCost: this.amountCategory, spendPercentOfBudgetCategory: this.percentCategory});
+    this.addListCategoryToSessionStorage();
     this.table?.renderRows();
     this.showAddingCategory = false;
-  };
+    this.amountCategory = 0;
+    this.percentCategory = 0;
+    this.nameCategory = '';
+  }; 
+
+
+  updateValuesByBudget = () => {
+    this.percentCategory = this.amountCategory/this.integrationBudget * 100;
+  }
+
+  updateValuesByCostCategory = () => {
+    this.percentCategory = this.amountCategory/this.integrationBudget * 100;
+  }
+
+  updateValuesByPercentCategory = () => {
+    this.amountCategory = this.percentCategory/100 * this.integrationBudget;
+  }
+
 }
