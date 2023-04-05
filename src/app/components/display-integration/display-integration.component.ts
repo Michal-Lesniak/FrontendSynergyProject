@@ -7,6 +7,7 @@ import { IntegrationDetail } from 'src/app/models/integration-detail';
 import { VersionBudget } from 'src/app/models/versionBudget';
 import { ImageService } from 'src/app/services/image/image.service';
 import { IntegrationService } from 'src/app/services/integration/integration.service';
+import { VersionService } from 'src/app/services/version/version.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class DisplayIntegrationComponent implements OnInit {
 
   srcImage?:any;
 
-  constructor(private route:ActivatedRoute, private router:Router, private integrationService: IntegrationService, private imageService:ImageService){
+  constructor(private route:ActivatedRoute, private router:Router, private integrationService: IntegrationService, private imageService:ImageService, private versionService:VersionService){
     this.integration_id = (router.getCurrentNavigation()?.extras.state)!['id'];
   }
 
@@ -35,7 +36,7 @@ export class DisplayIntegrationComponent implements OnInit {
       this.integration = res;
     });
 
-    this.integrationService.getVersionFromIntegration(this.integration_id!).subscribe(res => {
+    this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(res => {
       console.log(res);
       this.listVersion = res;
     });

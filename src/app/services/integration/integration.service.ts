@@ -1,7 +1,7 @@
+import { Integration } from './../../models/integration';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { Integration } from 'src/app/models/integration';
 import { IntegrationDetail } from 'src/app/models/integration-detail';
 import { VersionBudget } from 'src/app/models/versionBudget';
 
@@ -22,9 +22,8 @@ export class IntegrationService {
     return this.http.get<IntegrationDetail>(this.IntegrationsApiUrl + "/" + id);
   }
 
-  getVersionFromIntegration(id:number): Observable<VersionBudget[]>{
-    return this.http.get<VersionBudget[]>(this.IntegrationsApiUrl + "/" + id + "/version")
+  addIntegration(integration:IntegrationDetail): Observable<any>{
+    return this.http.post(this.IntegrationsApiUrl, JSON.stringify(integration));
   }
-
 
 }

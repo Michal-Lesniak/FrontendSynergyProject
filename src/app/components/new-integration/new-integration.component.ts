@@ -17,7 +17,6 @@ import { IntegrationDetail } from 'src/app/models/integration-detail';
 })
 export class NewIntegrationComponent implements OnInit{
 
-
   @ViewChild(MatTable) table?: MatTable<any>;
 
   integration?:IntegrationDetail;
@@ -49,6 +48,11 @@ export class NewIntegrationComponent implements OnInit{
     this.nameVersion = sessionStorage.getItem('versionName')!;
   }
 
+
+  createIntegration() {
+    
+    sessionStorage.clear();
+    }
 
 
   addVersionNameToSessionStorage(){

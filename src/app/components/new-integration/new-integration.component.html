@@ -69,7 +69,7 @@
             </div>
             <div class="align-end border-t p-3">
                 <button class="pr-2">+</button>
-                <button (click)="showAddingCategory=!showAddingCategory">Dodaj nową kategorię</button>
+                <button (click)="showAddingCategory=!showAddingCategory;">Dodaj nową kategorię</button>
             </div>
             
         </div>
@@ -77,6 +77,6 @@
     </div>
     <div class="flex justify-between mt-3">
         <button routerLink="/home" class=" ml-12 p-3 rounded bg-purple-900/80 text-white flex items-center" ><mat-icon class="text-white">navigate_before</mat-icon>Back</button>
-        <button routerLink="/integration/details" class=" mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
+        <button routerLink="/integration/details" (click)="createIntegration()" class=" mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
     </div>
 </div>
