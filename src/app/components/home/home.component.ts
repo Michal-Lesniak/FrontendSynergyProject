@@ -7,6 +7,7 @@ import { Integration } from 'src/app/models/integration';
 import { ImageService } from 'src/app/services/image/image.service';
 import { SafeUrl} from '@angular/platform-browser';
 import { DomSanitizer } from '@angular/platform-browser';
+import { first, take } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -26,14 +27,14 @@ export class HomeComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.integrationService.getIntegrations().subscribe( res => {this.integrations = res; this.setImagesToIntegration()});
+    this.integrationService.getIntegrations().pipe(first()).subscribe( res => {this.integrations = res; this.setImagesToIntegration()});
   }
 
   
 
   private setImagesToIntegration(): void {
     this.integrations?.forEach(integration => {
-      this.imageService.getImageById(integration.id!).subscribe(data => {   
+      this.imageService.getImageById(integration.id!).pipe(first()).subscribe(data => {   
         const blob = new Blob([data], { type: 'blob' }); // Create a Blob object from the image data
         const url = window.URL.createObjectURL(blob); // Generate a URL for the Blob object
         integration.srcImage = this.sanitizer.bypassSecurityTrustUrl(url); 

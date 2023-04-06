@@ -1,32 +1,32 @@
-<div class="h-screen">
+<div class="sm:h-screen">
     <app-header></app-header>
-    <div class="grid grid-cols-5 grid-rows-4 h-[80%] p-12 gap-3">
-        <div class="col-span-3 row-span-1 shadow rounded grid grid-cols-4">
-            <div class="col-span-2 flex flex-col justify-center m-5">
+    <div class="grid sm:grid-cols-5 xl:grid-rows-4 xl:h-[80%] sm:p-12 sm:gap-3">
+        <div class="sm:col-span-3 xl:row-span-1 shadow rounded xl:grid xl:grid-cols-4 p-4">
+            <div class="xl:col-span-2 flex flex-col justify-center m-2 xl:m-5">
                 <label>Name Budget</label>
                 <input class="border rounded p-1" [(ngModel)]="nameVersion" (ngModelChange)="addVersionNameToSessionStorage()" placeholder="Version 1" />
             </div>
-            <div class="col-span-1 flex flex-col justify-center m-2">
+            <div class="xl:col-span-1 flex flex-col justify-center m-2">
                 <label>Planned Budget(e)</label>
                 <input class="border rounded p-1" [(ngModel)]="integrationBudget" (ngModelChange)="updateValuesByBudget(); addIntegrationBudgetToSessionStorage()" placeholder="50000" />
             </div>
-            <div class="col-span-1 flex flex-col justify-center m-2 mr-5">
+            <div class="xl:col-span-1 flex flex-col justify-center m-2 xl:mr-5">
                 <label>No. Participants</label>
                 <input class="border rounded p-1" [(ngModel)]="noParticipant" (ngModelChange)="addIntegrationNoParticipantToSesstionStorage()" placeholder="59" />
             </div>
         </div>
-        <div class="col-span-2 row-span-4 shadow rounded flex flex-col p-8">
-           <div class="font-bold text-xl px-5">Info & Photo</div>
+        <div class="sm:col-span-2 sm:row-span-1 xl:row-span-4 shadow rounded flex flex-col p-4 sm:p-8 order-first sm:order-none">
+           <div class="font-bold text-center sm:text-xl px-5">Info & Photo</div>
            
-            <input class="p-5 border rounded m-5 flex flex-col" [(ngModel)]="integrationName" (ngModelChange)="addIntegrationNameToSessionStorage()" matInput placeholder="Integration 2023">
-            <button class="flex-1 bg-purple-900/20 rounded m-5" >
-                <div class="h-[70%] flex items-center justify-center">
-                    <mat-icon class="scale-[7] text-white">cloud_upload</mat-icon>
+            <input class="p-1 sm:p-5 border rounded m-2 sm:m-5 flex flex-col" [(ngModel)]="integrationName" (ngModelChange)="addIntegrationNameToSessionStorage()" matInput placeholder="Integration 2023">
+            <button class="flex-1 bg-purple-900/20 rounded m-2 sm:m-5" >
+                <div class="h-24 xl:h-[70%] flex items-center justify-center">
+                    <mat-icon class="scale-[3] sm:scale-[5] xl:scale-[7] text-white">cloud_upload</mat-icon>
                 </div>
-                <div>Click to upload or drag&drop</div>
+                <div class="mt-4">Click to upload or drag&drop</div>
             </button>
         </div>
-        <div class="col-span-3 row-span-3 shadow rounded h-full flex flex-col">
+        <div class="sm:col-span-5 xl:col-span-3 sm:row-span-3 shadow rounded min-h-[400px] h-full flex flex-col">
             <div class="font-bold text-xl p-3">Expenses</div>
             <div class="flex-1 overflow-y-scroll">
                 <table mat-table [dataSource]="listCategory!">
@@ -46,9 +46,9 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColums"></tr>"
                 </table>
             </div>
-            <div class="h-[30%] p-5" *ngIf="showAddingCategory">
-                <h2 class="pl-5">New Category</h2>
-                <div class="grid grid-cols-4">
+            <div class="border-t-2 xl:h-[30%] sm:p-5" *ngIf="showAddingCategory">
+                <h2 class="hidden sm:flex pl-5">New Category</h2>
+                <div class="sm:grid sm:grid-cols-4">
                     <div class="flex flex-col m-5">
                         <label>Name</label>
                         <input class="border rounded p-1" [(ngModel)]="nameCategory"  type="text" placeholder="Ex. Hotel">
@@ -75,8 +75,8 @@
         </div>
        
     </div>
-    <div class="flex justify-between mt-3">
-        <button routerLink="/home" class=" ml-12 p-3 rounded bg-purple-900/80 text-white flex items-center" ><mat-icon class="text-white">navigate_before</mat-icon>Back</button>
-        <button routerLink="/integration/details" (click)="createIntegration()" class=" mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
+    <div class="flex justify-between mt-1 sm:mt-3">
+        <button routerLink="/home" class="m-3 sm:ml-12 p-3 rounded bg-purple-900/80 text-white flex items-center" ><mat-icon class="text-white">navigate_before</mat-icon>Back</button>
+        <button routerLink="/integration/details" (click)="createIntegration()" class="m-3 sm:mr-12 p-3 rounded bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
     </div>
 </div>

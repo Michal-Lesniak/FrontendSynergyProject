@@ -1,19 +1,19 @@
 <div mat-dialog-content class="h-full">
-    <button mat-dialog-close class="absolute top-0 right-0 p-4 text-purple-900/80"><mat-icon class="scale-[1.75]">close</mat-icon></button>
-    <div class="grid grid-cols-2 h-full items-center ">
-        <div class="m-12 max-w-[200px] ml-auto">
+    <button mat-dialog-close class="absolute top-0 right-0 p-2 sm:p-4 text-purple-900/80"><mat-icon class="sm:scale-[1.75]">close</mat-icon></button>
+    <div class="flex flex-col sm:grid sm:grid-cols-2 h-full items-center pt-4 ">
+        <div class="m-4 sm:m-12 sm:max-w-[200px] sm:ml-auto">
             <button routerLink="/integration/new" mat-dialog-close class="shadow rounded w-full">
                 <img class="p-10 mx-auto" src="../../../../assets/Group 4.svg" />
             </button>
          
-            <button routerLink="/integration/new" mat-dialog-close class=" w-full bg-purple-900/80 rounded text-white mt-4 p-2">Nowy budżet</button>
+            <button routerLink="/integration/new" mat-dialog-close class="w-full bg-purple-900/80 rounded text-white mt-1 sm:mt-4 sm:p-2">Nowy budżet</button>
         </div>
-        <div class="m-12 max-w-[200px] mr-auto">
+        <div class="m-4 sm:m-12 sm:max-w-[200px] sm:mr-auto">
             <button mat-dialog-close class="shadow rounded w-full">
                 <img class="p-10 mx-auto" src="../../../../assets/Group 3.svg" />
             </button>
          
-            <button mat-dialog-close class="bg-purple-900/80 rounded text-white mt-4 w-full p-2">Użyj poprzedniego</button>
+            <button mat-dialog-close class="bg-purple-900/80 rounded text-white mt-1 sm:mt-4 w-full sm:p-2">Użyj poprzedniego</button>
         </div>   
     </div>
 </div>
