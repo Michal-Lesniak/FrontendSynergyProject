@@ -4,7 +4,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel, NumberValueAccessor } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTable } from '@angular/material/table';
-import { concatMap, from, take } from 'rxjs';
+import { concatMap, delay, forkJoin, from, ignoreElements, map, take, tap } from 'rxjs';
 import { ExpenseCategory } from 'src/app/models/expense-category';
 import { Integration } from 'src/app/models/integration';
 import { IntegrationDetail } from 'src/app/models/integration-detail';
@@ -20,152 +20,126 @@ import { VersionService } from 'src/app/services/version/version.service';
   templateUrl: './new-integration.component.html',
   styleUrls: ['./new-integration.component.css']
 })
-export class NewIntegrationComponent implements OnInit{
+export class NewIntegrationComponent implements OnInit {
 
-  constructor(private integrationService:IntegrationService,
-     private versionService:VersionService,
-     private categoryService:CategoryService){
+  constructor(private integrationService: IntegrationService,
+    private versionService: VersionService,
+    private categoryService: CategoryService) {
 
   }
 
   @ViewChild(MatTable) table?: MatTable<any>;
 
-  integration!:IntegrationDetail;
-  version?:VersionBudget;
-  srcImage?:any;
+  integration!: IntegrationDetail;
+  version!: VersionBudget;
+  srcImage?: any;
   listCategory?: ExpenseCategory[] = [];
 
-  nameVersion!:string;
-  percentOfSpendBudget:number = 88;
-  
-  noParticipant!:number;
-  integrationBudget!:number;
-  integrationName!:string
+  nameCategory!: string;
+  amountCategory!: number;
+  percentCategory!: number;
 
-  nameCategory!:string;
-  amountCategory!:number;
-  percentCategory!:number;
-
-  showAddingCategory?:boolean = true;
+  showAddingCategory?: boolean = true;
   displayedColums: string[] = ['Category', 'Amount', 'Percent'];
-  
+
 
   ngOnInit(): void {
-    if(sessionStorage.getItem('listCategory') !== null ){
+    if (sessionStorage.getItem('listCategory') !== null) {
       this.listCategory = JSON.parse(sessionStorage.getItem("listCategory")!);
     }
-    this.integrationName = sessionStorage.getItem('integrationName')!;
-    this.integrationBudget = JSON.parse(sessionStorage.getItem('integrationBudget')!);
-    this.noParticipant = JSON.parse(sessionStorage.getItem('integrationNoParticipant')!);
-    this.nameVersion = sessionStorage.getItem('versionName')!;
+
+    this.integration = {
+      name: sessionStorage.getItem('integrationName')!,
+      budget: JSON.parse(sessionStorage.getItem('integrationBudget')!),
+      noOfMembers: JSON.parse(sessionStorage.getItem('integrationNoParticipant')!)  
+    }
+
+    this.version = {
+      name: sessionStorage.getItem('versionName')!,
+      percentOfSpendBudget: 88 
+    }
+
   }
 
 
   createIntegration() {
-    this.integration = {
-      name: this.integrationName,
-      budget: this.integrationBudget,
-      noOfMembers: this.noParticipant
-    }
-
-    this.version = {
-      name: this.nameVersion,
-      percentOfSpendBudget: this.percentOfSpendBudget
-    }
-
-    //Check!!!!!!!!!!!!!!!!!!!!
     this.integrationService.addIntegration(this.integration).pipe(
       take(1),
       concatMap((res) => {
-        this.integration.id = res.id;
-        return this.versionService.addVersion(this.integration.id!, this.version!).pipe(take(1), concatMap((resv2) => {
-          this.version!.id = resv2.id;
-          return from(this.listCategory!).pipe(
-            concatMap((val) => this.categoryService.addCategory(this.version!.id!, val).pipe(take(1)))
-          );
-        }));
+        this.integration = res;
+        return this.versionService.addVersion(this.integration.id!, this.version!).pipe(take(1));
       }),
-      
-    ).subscribe();
-    //Check!!!!!!!!!!!!!!!!!!!! Wrong id to upload category!!!
-    
-    // this.integrationService.addIntegration(this.integration).pipe(take(1)).subscribe(
-    //   res=> {
-    //     this.integration.id = res.id;
-    //   }
-    // );
-
-    // this.integration.id && this.versionService.addVersion(this.integration.id, this.version).pipe(take(1)).subscribe(
-    //   res => {
-    //     this.version && (this.version.id = res.id);
-    //   }
-    // );
-
-    // this.listCategory?.forEach(val =>
-    //   this.version?.id && this.categoryService.addCategory(this.version.id ,val));
+      concatMap((res) => {
+        console.log(res);
+        this.version = res;
+        return from(this.listCategory!).pipe(
+          concatMap((val) => {
+            return this.categoryService.addCategory(this.version!.id!, val).pipe(take(1));
+          })
+        );
+      })
+    ).subscribe(res => console.log(res));
+    sessionStorage.clear();
+  }
 
 
-    //   sessionStorage.clear();
-    }
-
-
-  addVersionNameToSessionStorage(){
-    if(sessionStorage.getItem("versionName") !== null ){
+  addVersionNameToSessionStorage() {
+    if (sessionStorage.getItem("versionName") !== null) {
       sessionStorage.removeItem("versionName");
     }
-    sessionStorage.setItem("versionName", this.nameVersion);
+    sessionStorage.setItem("versionName", this.version.name);
   }
 
-  addIntegrationBudgetToSessionStorage(){
-    if(sessionStorage.getItem("integrationBudget") !== null ){
+  addIntegrationBudgetToSessionStorage() {
+    if (sessionStorage.getItem("integrationBudget") !== null) {
       sessionStorage.removeItem("integrationBudget");
     }
-    sessionStorage.setItem("integrationBudget", JSON.stringify(this.integrationBudget));
+    sessionStorage.setItem("integrationBudget", JSON.stringify(this.integration.budget));
   }
 
-  addIntegrationNoParticipantToSesstionStorage(){
-    if(sessionStorage.getItem("integrationNoParticipant") !== null ){
+  addIntegrationNoParticipantToSesstionStorage() {
+    if (sessionStorage.getItem("integrationNoParticipant") !== null) {
       sessionStorage.removeItem("integrationNoParticipant");
     }
-    sessionStorage.setItem("integrationNoParticipant", JSON.stringify(this.noParticipant));
+    sessionStorage.setItem("integrationNoParticipant", JSON.stringify(this.integration.noOfMembers));
   }
 
 
   addIntegrationNameToSessionStorage() {
-    if(sessionStorage.getItem("integrationName") !== null){
+    if (sessionStorage.getItem("integrationName") !== null) {
       sessionStorage.removeItem("integrationName");
     }
-    sessionStorage.setItem("integrationName", this.integrationName);
+    sessionStorage.setItem("integrationName", this.integration.name);
   }
 
-  addListCategoryToSessionStorage(){
-    if(sessionStorage.getItem("listCategory") !== null){ 
+  addListCategoryToSessionStorage() {
+    if (sessionStorage.getItem("listCategory") !== null) {
       sessionStorage.removeItem("listCategory");
     }
     sessionStorage.setItem("listCategory", JSON.stringify(this.listCategory));
   }
 
   addCategory = () => {
-    this.listCategory?.push({name: this.nameCategory, fullCost: this.amountCategory, spendPercentOfBudgetCategory: this.percentCategory});
+    this.listCategory?.push({ name: this.nameCategory, fullCost: this.amountCategory, spendPercentOfBudgetCategory: this.percentCategory });
     this.addListCategoryToSessionStorage();
     this.table?.renderRows();
     this.showAddingCategory = false;
     this.amountCategory = 0;
     this.percentCategory = 0;
     this.nameCategory = '';
-  }; 
+  };
 
 
   updateValuesByBudget = () => {
-    this.percentCategory = this.amountCategory/this.integrationBudget * 100;
+    this.percentCategory = this.amountCategory / this.integration.budget * 100;
   }
 
   updateValuesByCostCategory = () => {
-    this.percentCategory = this.amountCategory/this.integrationBudget * 100;
+    this.percentCategory = this.amountCategory / this.integration.budget * 100;
   }
 
   updateValuesByPercentCategory = () => {
-    this.amountCategory = this.percentCategory/100 * this.integrationBudget;
+    this.amountCategory = this.percentCategory / 100 * this.integration.budget;
   }
 
 }

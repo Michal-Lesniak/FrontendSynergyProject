@@ -23,7 +23,6 @@ export class IntegrationService {
 	}
 
 	addIntegration(integration: IntegrationDetail): Observable<any> {
-		console.log(JSON.stringify(integration));
 		return this.http.post(this.IntegrationsApiUrl, JSON.stringify(integration), { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
 	}
 
