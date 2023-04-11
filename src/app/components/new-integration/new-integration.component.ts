@@ -36,7 +36,7 @@ export class NewIntegrationComponent implements OnInit {
   fileImage?: File;
   srcImage?: any;
   listCategory?: ExpenseCategory[] = [];
-  
+
 
   nameCategory!: string;
   amountCategory!: number;
@@ -55,36 +55,40 @@ export class NewIntegrationComponent implements OnInit {
     this.integration = {
       name: sessionStorage.getItem('integrationName')!,
       budget: JSON.parse(sessionStorage.getItem('integrationBudget')!),
-      noOfMembers: JSON.parse(sessionStorage.getItem('integrationNoParticipant')!)  
+      noOfMembers: JSON.parse(sessionStorage.getItem('integrationNoParticipant')!)
     }
 
     this.version = {
       name: sessionStorage.getItem('versionName')!,
-      percentOfSpendBudget: 88 
+      percentOfSpendBudget: 88
     }
-    
+
     this.srcImage = sessionStorage.getItem('image');
-    if(this.srcImage != null){
+    if (this.srcImage != null) {
       this.fileSelected = true;
     }
   }
 
 
-  onFileSelected(event:any){
-    this.fileSelected = true;
+  onFileSelected(event: any) {
     this.fileImage = event.target.files[0];
-    if(this.fileImage){
-      const reader = new FileReader();
-      reader.readAsDataURL(this.fileImage);
-      reader.onload = () => {
-        this.srcImage = reader.result as string;
-        if(sessionStorage.getItem('image') != null ){
-          sessionStorage.removeItem('image');
-        }
-        sessionStorage.setItem('image', this.srcImage); 
-      };
+    if (this.fileImage) {
+      if (this.fileImage.size / 1024 / 1024 > 2) {
+        alert("File size exceeds 2 MB");
+      }
+      else { 
+        const reader = new FileReader();
+        reader.readAsDataURL(this.fileImage);
+        reader.onload = () => {
+          this.srcImage = reader.result as string;
+          if (sessionStorage.getItem('image') != null) {
+            sessionStorage.removeItem('image');
+          }
+          sessionStorage.setItem('image', this.srcImage);
+        }; 
+        this.fileSelected = true;
+      }
     }
-    
   }
 
   createIntegration() {
