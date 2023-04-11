@@ -4,12 +4,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel, NumberValueAccessor } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTable } from '@angular/material/table';
-import { concatMap, delay, forkJoin, from, ignoreElements, map, take, tap } from 'rxjs';
+import { concat, concatMap, delay, forkJoin, from, ignoreElements, map, take, tap } from 'rxjs';
 import { ExpenseCategory } from 'src/app/models/expense-category';
 import { Integration } from 'src/app/models/integration';
 import { IntegrationDetail } from 'src/app/models/integration-detail';
 import { VersionBudget } from 'src/app/models/versionBudget';
 import { CategoryService } from 'src/app/services/category/category.service';
+import { ImageService } from 'src/app/services/image/image.service';
 import { IntegrationService } from 'src/app/services/integration/integration.service';
 import { VersionService } from 'src/app/services/version/version.service';
 
@@ -24,21 +25,24 @@ export class NewIntegrationComponent implements OnInit {
 
   constructor(private integrationService: IntegrationService,
     private versionService: VersionService,
-    private categoryService: CategoryService) {
-
+    private categoryService: CategoryService,
+    private imageService: ImageService) {
   }
 
   @ViewChild(MatTable) table?: MatTable<any>;
 
   integration!: IntegrationDetail;
   version!: VersionBudget;
+  fileImage?: File;
   srcImage?: any;
   listCategory?: ExpenseCategory[] = [];
+  
 
   nameCategory!: string;
   amountCategory!: number;
   percentCategory!: number;
 
+  fileSelected?: boolean = false;
   showAddingCategory?: boolean = true;
   displayedColums: string[] = ['Category', 'Amount', 'Percent'];
 
@@ -58,9 +62,30 @@ export class NewIntegrationComponent implements OnInit {
       name: sessionStorage.getItem('versionName')!,
       percentOfSpendBudget: 88 
     }
-
+    
+    this.srcImage = sessionStorage.getItem('image');
+    if(this.srcImage != null){
+      this.fileSelected = true;
+    }
   }
 
+
+  onFileSelected(event:any){
+    this.fileSelected = true;
+    this.fileImage = event.target.files[0];
+    if(this.fileImage){
+      const reader = new FileReader();
+      reader.readAsDataURL(this.fileImage);
+      reader.onload = () => {
+        this.srcImage = reader.result as string;
+        if(sessionStorage.getItem('image') != null ){
+          sessionStorage.removeItem('image');
+        }
+        sessionStorage.setItem('image', this.srcImage); 
+      };
+    }
+    
+  }
 
   createIntegration() {
     this.integrationService.addIntegration(this.integration).pipe(
@@ -68,6 +93,9 @@ export class NewIntegrationComponent implements OnInit {
       concatMap((res) => {
         this.integration = res;
         return this.versionService.addVersion(this.integration.id!, this.version!).pipe(take(1));
+      }),
+      concatMap((res) => {
+        return this.imageService.addImage(this.integration!.id!, this.fileImage!).pipe(take(1));
       }),
       concatMap((res) => {
         console.log(res);

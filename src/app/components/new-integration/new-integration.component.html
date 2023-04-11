@@ -15,16 +15,24 @@
                 <input class="border rounded p-1" [(ngModel)]="integration.noOfMembers" (ngModelChange)="addIntegrationNoParticipantToSesstionStorage()" placeholder="59" />
             </div>
         </div>
-        <div class="sm:col-span-2 sm:row-span-1 xl:row-span-4 shadow rounded flex flex-col p-4 sm:p-8 order-first sm:order-none">
+        <div class="sm:col-span-2 sm:row-span-1 xl:row-span-4 shadow rounded flex flex-col p-4 sm:p-8 order-first sm:order-none" >
            <div class="font-bold text-center sm:text-xl px-5">Info & Photo</div>
            
             <input class="p-1 sm:p-5 border rounded m-2 sm:m-5 flex flex-col" [(ngModel)]="this.integration.name" (ngModelChange)="addIntegrationNameToSessionStorage()" matInput placeholder="Integration 2023">
-            <button class="flex-1 bg-purple-900/20 rounded m-2 sm:m-5" >
+            <input type="file" class="hidden" (change)="onFileSelected($event)" #uploadFile>
+            <button *ngIf="!fileSelected" class="flex-1 bg-purple-900/20 rounded m-2 sm:m-5" (click)="uploadFile.click()">
                 <div class="h-24 xl:h-[70%] flex items-center justify-center">
                     <mat-icon class="scale-[3] sm:scale-[5] xl:scale-[7] text-white">cloud_upload</mat-icon>
                 </div>
                 <div class="mt-4">Click to upload or drag&drop</div>
             </button>
+            <div class="flex flex-col flex-1 rounded m-2 sm:m-5" *ngIf="fileSelected">
+                <img class="rounded mt-3" [src]="srcImage" alt="">
+                <div class="flex flex-1 justify-center items-center">
+                    <button class="m-3 p-3 rounded-full bg-purple-900/20 hover:bg-purple-900/80 text-white flex items-center" (click)="uploadFile.click()">Change Image</button>
+                </div>
+               
+            </div>
         </div>
         <div class="sm:col-span-5 xl:col-span-3 sm:row-span-3 shadow rounded min-h-[400px] h-full flex flex-col">
             <div class="font-bold text-xl p-3">Expenses</div>
