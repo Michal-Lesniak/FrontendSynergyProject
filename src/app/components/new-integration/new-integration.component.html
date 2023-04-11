@@ -4,34 +4,34 @@
         <div class="sm:col-span-3 xl:row-span-1 shadow rounded xl:grid xl:grid-cols-4 p-4">
             <div class="xl:col-span-2 flex flex-col justify-center m-2 xl:m-5">
                 <label>Name Budget</label>
-                <input class="border rounded p-1" [(ngModel)]="version.name" (ngModelChange)="addVersionNameToSessionStorage()" placeholder="Version 1" />
+                <input  class="border rounded p-1" [(ngModel)]="version.name" (ngModelChange)="addVersionNameToSessionStorage()" placeholder="Ex. Version 1" />
             </div>
             <div class="xl:col-span-1 flex flex-col justify-center m-2">
                 <label>Planned Budget(e)</label>
-                <input class="border rounded p-1" [(ngModel)]="integration.budget" (ngModelChange)="updateValuesByBudget(); addIntegrationBudgetToSessionStorage()" placeholder="50000" />
+                <input class="border rounded p-1" [(ngModel)]="integration.budget" (ngModelChange)="updateValuesByBudget(); addIntegrationBudgetToSessionStorage()" placeholder="Ex. 50000" />
             </div>
             <div class="xl:col-span-1 flex flex-col justify-center m-2 xl:mr-5">
                 <label>No. Participants</label>
-                <input class="border rounded p-1" [(ngModel)]="integration.noOfMembers" (ngModelChange)="addIntegrationNoParticipantToSesstionStorage()" placeholder="59" />
+                <input class="border rounded p-1" [(ngModel)]="integration.noOfMembers" (ngModelChange)="addIntegrationNoParticipantToSesstionStorage()" placeholder="Ex. 59" />
             </div>
         </div>
-        <div class="sm:col-span-2 sm:row-span-1 xl:row-span-4 shadow rounded flex flex-col p-4 sm:p-8 order-first sm:order-none" >
+        <div class="sm:col-span-2 sm:row-span-1 xl:row-span-4 shadow rounded flex flex-col p-4 md:p-8 order-first sm:order-none " >
            <div class="font-bold text-center sm:text-xl px-5">Info & Photo</div>
-           
-            <input class="p-1 sm:p-5 border rounded m-2 sm:m-5 flex flex-col" [(ngModel)]="this.integration.name" (ngModelChange)="addIntegrationNameToSessionStorage()" matInput placeholder="Integration 2023">
-            <input type="file" class="hidden" (change)="onFileSelected($event)" #uploadFile>
-            <button *ngIf="!fileSelected" class="flex-1 bg-purple-900/20 rounded m-2 sm:m-5" (click)="uploadFile.click()">
+            <input class="p-1 md:p-5 border rounded m-2 md:m-5 flex flex-col" [(ngModel)]="this.integration.name" (ngModelChange)="addIntegrationNameToSessionStorage()" matInput placeholder="Integration Name">
+            <input type="file" class="hidden" accept="image/*" (change)="onFileSelected($event)" #uploadFile>
+
+            <button *ngIf="!fileSelected" class="flex-1 bg-purple-900/20 rounded m-2 md:m-5" (click)="uploadFile.click()">
                 <div class="h-24 xl:h-[70%] flex items-center justify-center">
                     <mat-icon class="scale-[3] sm:scale-[5] xl:scale-[7] text-white">cloud_upload</mat-icon>
                 </div>
-                <div class="mt-4">Click to upload or drag&drop</div>
+                <div class="mt-4">Click to upload Image file <br> Only Image File <br> max-size: 2MB</div>
             </button>
-            <div class="flex flex-col flex-1 rounded m-2 sm:m-5" *ngIf="fileSelected">
-                <img class="rounded mt-3" [src]="srcImage" alt="">
-                <div class="flex flex-1 justify-center items-center">
-                    <button class="m-3 p-3 rounded-full bg-purple-900/20 hover:bg-purple-900/80 text-white flex items-center" (click)="uploadFile.click()">Change Image</button>
+
+            <div class="relative flex flex-col flex-1 rounded m-2 md:m-5 overflow-hidden" *ngIf="fileSelected">
+                <img class="rounded mt-3 overflow-hidden" [src]="srcImage" alt="">
+                <div class="flex flex-1 mt-3 justify-center items-center">
+                    <button class="m-1 md:m-3 p-1 md:p-3  rounded md:rounded-full bg-purple-900/20 hover:bg-purple-900/80 text-white flex items-center" (click)="uploadFile.click()">Change Image</button>
                 </div>
-               
             </div>
         </div>
         <div class="sm:col-span-5 xl:col-span-3 sm:row-span-3 shadow rounded min-h-[400px] h-full flex flex-col">
