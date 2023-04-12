@@ -50,7 +50,16 @@ export class NewIntegrationComponent implements OnInit {
   ngOnInit(): void {
     if (sessionStorage.getItem('listCategory') !== null) {
       this.listCategory = JSON.parse(sessionStorage.getItem("listCategory")!);
+      console.log(this.listCategory);
     }
+
+    if(sessionStorage.getItem('image') !== null) {
+      fetch(sessionStorage.getItem('image')!)
+      .then(response => response.blob())
+      .then(blob => {
+       this.fileImage = new File([blob], 'integration.png', {type: blob.type});});
+      }
+    
 
     this.integration = {
       name: sessionStorage.getItem('integrationName')!,
@@ -96,22 +105,22 @@ export class NewIntegrationComponent implements OnInit {
       take(1),
       concatMap((res) => {
         this.integration = res;
-        return this.versionService.addVersion(this.integration.id!, this.version!).pipe(take(1));
+        return this.versionService.addVersion(this.integration.id!, this.version!).pipe(take(1),
+        tap(res => this.version.id = res.id));
+      }),
+      concatMap(() => {
+        return this.imageService.addImage(this.integration!.id!, this.fileImage!).pipe(take(1));
       }),
       concatMap((res) => {
         console.log(res);
-        this.version = res;
         return from(this.listCategory!).pipe(
-          map((val) => {
+          concatMap((val) => {
             return this.categoryService.addCategory(this.version!.id!, val).pipe(take(1));
           })
         );
-      }),
-      concatMap((res) => {
-        return this.imageService.addImage(this.integration!.id!, this.fileImage!).pipe(take(1));
       })
     ).subscribe(res => console.log(res));
-    //sessionStorage.clear();
+    sessionStorage.clear();
   }
 
 
@@ -211,7 +220,5 @@ export class NewIntegrationComponent implements OnInit {
     return false; 
   }
 }
-function MergeMap(arg0: (res: any) => import("rxjs").Observable<any>): import("rxjs").OperatorFunction<any, unknown> {
-  throw new Error('Function not implemented.');
-}
+
 

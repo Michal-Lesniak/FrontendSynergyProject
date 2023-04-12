@@ -3,7 +3,7 @@
     <div class="text-black sm:text-2xl xl:text-5xl font-extrabold text-center xl:text-start sm:px-12 xl:px-24 py-4 sm:py-8 xl:py-12">Wybierz edycję integracji </div>
     <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-12 xl:gap-24 p-5 sm:p-14 xl:p-28 overflow-hidden">
         <button  [routerLink]="['/',integration.name]" [state]="{id: integration.id}"  class="grid grid-cols-3 rounded overflow-hidden shadow-xl  sm:h-40 h-32 " *ngFor="let integration of integrations">
-            <img class="col-span-1 h-full w-full bg-auto" [src]="integration.srcImage" alt=""/>
+            <img class="col-span-1 h-full w-full bg-auto overflow-hidden" [src]="integration.srcImage" alt=""/>
             <div class="col-span-2 h-full flex items-center justify-center"><p>{{integration.name}}</p></div>
         </button>
         <button class="rounded shadow-xl sm:h-40 h-32" (click)="openDialog()">Add new</button>
