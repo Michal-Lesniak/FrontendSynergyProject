@@ -35,7 +35,7 @@ export class NewIntegrationComponent implements OnInit {
   version!: VersionBudget;
   fileImage?: File;
   srcImage?: any;
-  listCategory?: ExpenseCategory[] = [];
+  listCategory?: Array<ExpenseCategory> = [];
 
 
   nameCategory!: string;
@@ -44,7 +44,7 @@ export class NewIntegrationComponent implements OnInit {
 
   fileSelected?: boolean = false;
   showAddingCategory?: boolean = true;
-  displayedColums: string[] = ['Category', 'Amount', 'Percent'];
+  displayedColums: string[] = ['Category', 'Amount', 'Percent','Delete'];
 
 
   ngOnInit(): void {
@@ -60,7 +60,7 @@ export class NewIntegrationComponent implements OnInit {
 
     this.version = {
       name: sessionStorage.getItem('versionName')!,
-      percentOfSpendBudget: 88
+      percentOfSpendBudget: this.listCategory!.reduce((sum, category) => sum + category.fullCost, 0) / this.integration.budget * 100
     }
 
     this.srcImage = sessionStorage.getItem('image');
@@ -76,7 +76,7 @@ export class NewIntegrationComponent implements OnInit {
       if (this.fileImage.size / 1024 / 1024 > 2) {
         alert("File size exceeds 2 MB");
       }
-      else { 
+      else {
         const reader = new FileReader();
         reader.readAsDataURL(this.fileImage);
         reader.onload = () => {
@@ -85,7 +85,7 @@ export class NewIntegrationComponent implements OnInit {
             sessionStorage.removeItem('image');
           }
           sessionStorage.setItem('image', this.srcImage);
-        }; 
+        };
         this.fileSelected = true;
       }
     }
@@ -99,19 +99,19 @@ export class NewIntegrationComponent implements OnInit {
         return this.versionService.addVersion(this.integration.id!, this.version!).pipe(take(1));
       }),
       concatMap((res) => {
-        return this.imageService.addImage(this.integration!.id!, this.fileImage!).pipe(take(1));
-      }),
-      concatMap((res) => {
         console.log(res);
         this.version = res;
         return from(this.listCategory!).pipe(
-          concatMap((val) => {
+          map((val) => {
             return this.categoryService.addCategory(this.version!.id!, val).pipe(take(1));
           })
         );
+      }),
+      concatMap((res) => {
+        return this.imageService.addImage(this.integration!.id!, this.fileImage!).pipe(take(1));
       })
     ).subscribe(res => console.log(res));
-    sessionStorage.clear();
+    //sessionStorage.clear();
   }
 
 
@@ -151,27 +151,67 @@ export class NewIntegrationComponent implements OnInit {
     sessionStorage.setItem("listCategory", JSON.stringify(this.listCategory));
   }
 
+  addSpendPercentOfBudget(){
+    if(sessionStorage.getItem("spendPercentOfBudget") !== null) {
+      sessionStorage.removeItem("spendPercentOfBudget");
+    }
+    sessionStorage.setItem("spendPercentOfBudget", JSON.stringify(this.version.percentOfSpendBudget));
+  }
+
   addCategory = () => {
     this.listCategory?.push({ name: this.nameCategory, fullCost: this.amountCategory, spendPercentOfBudgetCategory: this.percentCategory });
+    this.version.percentOfSpendBudget = this.listCategory!.reduce((sum, category) => sum + category.fullCost, 0) / this.integration.budget * 100;
     this.addListCategoryToSessionStorage();
+    this.addSpendPercentOfBudget();
     this.table?.renderRows();
     this.showAddingCategory = false;
     this.amountCategory = 0;
     this.percentCategory = 0;
     this.nameCategory = '';
+    console.log(this.version.percentOfSpendBudget);
   };
+
+  deleteCategory = (category:ExpenseCategory) => {
+    this.listCategory = this.listCategory?.filter(val => val != category);
+  }
 
 
   updateValuesByBudget = () => {
-    this.percentCategory = this.amountCategory / this.integration.budget * 100;
+    if (this.listCategory?.length != 0) {
+      this.listCategory?.forEach(el => {
+        el.spendPercentOfBudgetCategory = el.fullCost / this.integration.budget * 100;
+      })
+      this.addListCategoryToSessionStorage();
+    }
+
   }
 
   updateValuesByCostCategory = () => {
-    this.percentCategory = this.amountCategory / this.integration.budget * 100;
+    if (this.integration.budget >= 0) {
+      this.percentCategory = this.amountCategory / this.integration.budget * 100;
+    }
   }
 
   updateValuesByPercentCategory = () => {
-    this.amountCategory = this.percentCategory / 100 * this.integration.budget;
+    if (this.integration.budget >= 0) {
+      this.amountCategory = this.percentCategory / 100 * this.integration.budget;
+    }
   }
 
+  allowCreate():Boolean{
+    if(this.integration && 
+      this.listCategory && 
+      !this.integration.name || 
+      this.listCategory!.length <= 0 || 
+      !this.version.name || 
+      this.integration.budget <= 0 || 
+      this.integration.noOfMembers <= 0 ){
+      return true;
+    }
+    return false; 
+  }
 }
+function MergeMap(arg0: (res: any) => import("rxjs").Observable<any>): import("rxjs").OperatorFunction<any, unknown> {
+  throw new Error('Function not implemented.');
+}
+
