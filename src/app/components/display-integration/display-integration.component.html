@@ -16,4 +16,5 @@
         {{version.id}}
         {{version.percentOfSpendBudget}}
     </div>
-</div>
+    <button [routerLink]="['/integration/details']" [state]="{id: integration!.id}">Edit</button>
+</div>  

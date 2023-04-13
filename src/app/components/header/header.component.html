@@ -1,7 +1,7 @@
 <div class="w-screen h-24 shadow-xl overflow-hidden flex justify-between items-center">
     <img class="h-12 pl-24" src="../../../assets/logo.png" alt=""/>
     <div class="flex flex-row items-center" *ngIf="extendedFunctionality">
-     <img class="scale-50 rounded-lg" src="../../../assets/default.png" alt="">
+     <img class="max-w-[90px] max-h-[90px] mx-2 rounded-lg overflow-hidden" [src]="imageSrc" alt="">
      <h2 class="font-bold">{{integrationName}}</h2>
     </div>
     <div class="pr-10 flex flex-row items-center " *ngIf="extendedFunctionality">

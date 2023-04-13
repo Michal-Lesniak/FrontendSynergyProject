@@ -16,6 +16,7 @@ import { IntegrationDetailsComponent } from './components/integration-details/in
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { DisplayIntegrationComponent } from './components/display-integration/display-integration.component';
+import { VersionViewComponent } from './components/integration-details/versionView/version-view/version-view.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { DisplayIntegrationComponent } from './components/display-integration/di
     NewIntegrationComponent,
     IntegrationDetailsComponent,
     DisplayIntegrationComponent,
+    VersionViewComponent,
   ],
   imports: [
     BrowserModule,

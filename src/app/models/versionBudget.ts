@@ -4,5 +4,5 @@ export interface VersionBudget {
     id?:number;
     name: string;
     percentOfSpendBudget: number;
-    listCategory?:Array<ExpenseCategory>;
+    categoryList?:Array<ExpenseCategory>;
 }

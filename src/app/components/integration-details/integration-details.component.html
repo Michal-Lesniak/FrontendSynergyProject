@@ -1,42 +1,20 @@
 <div class="flex flex-col h-screen">
-    <app-header [extendedFunctionality]=true integrationName={{integrationName}} ></app-header>
+    <app-header [extendedFunctionality]=true integrationName={{integration?.name}} imageSrc={{imageURL}} ></app-header>
     <div class="grid grid-cols-2 flex-1">
         <div class="flex flex-col">
             <div class="pt-8 border-b-2">
                 <h2 class="pl-20 text-[2rem] font-bold text-purple-900/80">Main Version</h2>
             </div> 
-            <div class="flex-1 pt-12 pl-20 pr-12 flex flex-col">
-                <div class="flex flex-row justify-between">
-                    <div class="flex flex-row text-2xl">
-                        <div class="pr-4 border-r">
-                            <input #myInput [ngClass]="{'border-b': !inputNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 5" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="inputNameVersion" value="Version 1"/>
-                        </div>
-                        <button class="px-2" (click)="inputNameVersion = !inputNameVersion" ><mat-icon class="text-purple-900/80">create</mat-icon></button>
-                    </div>
-                    <div>
-                        <button class="px-4 py-1  text-white rounded bg-purple-900/80">Duplicate</button>
-                    </div>
-                </div>
-                <div class="relative w-full h-8 bg-purple-900/20 mt-6">
-                    <div class="absolute w-full h-full text-bold flex items-center justify-center text-white">{{percent}}%</div>
-                    <div [style.width]="percent + '%'" class="h-8 bg-purple-900/80"></div>
-                </div>
-                <div class="flex-1 bg-slate-200 rounded shadow flex flex-col my-10">
-                    <div class="flex flex-row p-2" *ngFor="let item of exampleData">
-                        <button class="p-3"><mat-icon>expand_more</mat-icon></button>
-                        <div class="flex-1 grid grid-rows-2">
-                            <div class="flex flex-rows justify-between">
-                                <div>{{item.name}}</div>
-                                <div>{{item.spendPercentOfBudgetCategory}}% ({{item.fullCost * item.spendPercentOfBudgetCategory/100}} / {{item.fullCost}}e )</div>
-                            </div>
-                            <mat-progress-bar mode="determinate" value={{item.spendPercentOfBudgetCategory}}></mat-progress-bar>
-                        </div>
-                        <button class="p-3 text-purple-900/80"><mat-icon>add_circle</mat-icon></button>
-                    </div>
-                </div>
-            </div>
+            <app-version-view class="flex-1 flex" [version]="mainVersion" [tempView]= "false" (duplicateEvent)="addVersion($event)" ></app-version-view>
         </div>
-        <div>
+        <div *ngIf="listVersion?.length === 1" class="flex-1 flex items-center justify-center">
+                <span class="text-2xl">Not Found Version To Compare</span>
+        </div>
+        <div *ngIf="listVersion!.length >= 2" class="flex-1 flex flex-col">
+            <div class="pt-11 border-b-2">
+                <button class="focus:bg-purple-900/20 text-[1.5rem] px-2" *ngFor="let version of listVersion">{{version.name}}</button>
+            </div>
+            <app-version-view class="flex-1 flex" [version]="tempVersion" [tempView]="true" (duplicateEvent)="addVersion($event)"></app-version-view>
             
         </div>
     </div>
