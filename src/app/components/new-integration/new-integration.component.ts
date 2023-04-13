@@ -4,7 +4,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgModel, NumberValueAccessor } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTable } from '@angular/material/table';
-import { concat, concatMap, delay, forkJoin, from, ignoreElements, map, take, tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { concat, concatMap, delay, firstValueFrom, forkJoin, from, ignoreElements, map, take, tap } from 'rxjs';
 import { ExpenseCategory } from 'src/app/models/expense-category';
 import { Integration } from 'src/app/models/integration';
 import { IntegrationDetail } from 'src/app/models/integration-detail';
@@ -26,7 +27,8 @@ export class NewIntegrationComponent implements OnInit {
   constructor(private integrationService: IntegrationService,
     private versionService: VersionService,
     private categoryService: CategoryService,
-    private imageService: ImageService) {
+    private imageService: ImageService,
+    private router: Router) {
   }
 
   @ViewChild(MatTable) table?: MatTable<any>;
@@ -44,7 +46,7 @@ export class NewIntegrationComponent implements OnInit {
 
   fileSelected?: boolean = false;
   showAddingCategory?: boolean = true;
-  displayedColums: string[] = ['Category', 'Amount', 'Percent','Delete'];
+  displayedColums: string[] = ['Category', 'Amount', 'Percent', 'Delete'];
 
 
   ngOnInit(): void {
@@ -53,13 +55,14 @@ export class NewIntegrationComponent implements OnInit {
       console.log(this.listCategory);
     }
 
-    if(sessionStorage.getItem('image') !== null) {
+    if (sessionStorage.getItem('image') !== null) {
       fetch(sessionStorage.getItem('image')!)
-      .then(response => response.blob())
-      .then(blob => {
-       this.fileImage = new File([blob], 'integration.png', {type: blob.type});});
-      }
-    
+        .then(response => response.blob())
+        .then(blob => {
+          this.fileImage = new File([blob], 'integration.png', { type: blob.type });
+        });
+    }
+
 
     this.integration = {
       name: sessionStorage.getItem('integrationName')!,
@@ -100,27 +103,20 @@ export class NewIntegrationComponent implements OnInit {
     }
   }
 
-  createIntegration() {
-    this.integrationService.addIntegration(this.integration).pipe(
-      take(1),
-      concatMap((res) => {
-        this.integration = res;
-        return this.versionService.addVersion(this.integration.id!, this.version!).pipe(take(1),
-        tap(res => this.version.id = res.id));
-      }),
-      concatMap(() => {
-        return this.imageService.addImage(this.integration!.id!, this.fileImage!).pipe(take(1));
-      }),
-      concatMap((res) => {
-        console.log(res);
-        return from(this.listCategory!).pipe(
-          concatMap((val) => {
-            return this.categoryService.addCategory(this.version!.id!, val).pipe(take(1));
-          })
-        );
-      })
-    ).subscribe(res => console.log(res));
-    sessionStorage.clear();
+  async createIntegrationAndNavigateToNextView() {
+    try {
+      this.integration = await firstValueFrom(this.integrationService.addIntegration(this.integration));
+      this.version = await firstValueFrom(this.versionService.addVersion(this.integration.id!, this.version!));
+      await firstValueFrom(this.imageService.addImage(this.integration.id!, this.fileImage!));
+      this.listCategory?.forEach(async val => {
+        await firstValueFrom(this.categoryService.addCategory(this.version.id!, val));
+      });
+      this.router.navigate(['/integration/details'], { state: { id: this.integration.id } });
+      sessionStorage.clear();
+    } catch {
+      alert("Error while sending data to server");
+    }
+
   }
 
 
@@ -160,8 +156,8 @@ export class NewIntegrationComponent implements OnInit {
     sessionStorage.setItem("listCategory", JSON.stringify(this.listCategory));
   }
 
-  addSpendPercentOfBudget(){
-    if(sessionStorage.getItem("spendPercentOfBudget") !== null) {
+  addSpendPercentOfBudget() {
+    if (sessionStorage.getItem("spendPercentOfBudget") !== null) {
       sessionStorage.removeItem("spendPercentOfBudget");
     }
     sessionStorage.setItem("spendPercentOfBudget", JSON.stringify(this.version.percentOfSpendBudget));
@@ -177,10 +173,9 @@ export class NewIntegrationComponent implements OnInit {
     this.amountCategory = 0;
     this.percentCategory = 0;
     this.nameCategory = '';
-    console.log(this.version.percentOfSpendBudget);
   };
 
-  deleteCategory = (category:ExpenseCategory) => {
+  deleteCategory = (category: ExpenseCategory) => {
     this.listCategory = this.listCategory?.filter(val => val != category);
   }
 
@@ -207,17 +202,17 @@ export class NewIntegrationComponent implements OnInit {
     }
   }
 
-  allowCreate():Boolean{
-    if(this.integration && 
-      this.listCategory && 
-      !this.integration.name || 
-      this.listCategory!.length <= 0 || 
-      !this.version.name || 
-      this.integration.budget <= 0 || 
-      this.integration.noOfMembers <= 0 ){
+  allowCreate(): Boolean {
+    if (this.integration &&
+      this.listCategory &&
+      !this.integration.name ||
+      this.listCategory!.length <= 0 ||
+      !this.version.name ||
+      this.integration.budget <= 0 ||
+      this.integration.noOfMembers <= 0) {
       return true;
     }
-    return false; 
+    return false;
   }
 }
 
