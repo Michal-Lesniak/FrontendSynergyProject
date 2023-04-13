@@ -164,7 +164,7 @@ export class NewIntegrationComponent implements OnInit {
   }
 
   addCategory = () => {
-    this.listCategory?.push({ name: this.nameCategory, fullCost: this.amountCategory, spendPercentOfBudgetCategory: this.percentCategory });
+    this.listCategory?.push({ name: this.nameCategory, fullCost: this.amountCategory, spendPercentOfBudgetCategory: 0 });
     this.version.percentOfSpendBudget = this.listCategory!.reduce((sum, category) => sum + category.fullCost, 0) / this.integration.budget * 100;
     this.addListCategoryToSessionStorage();
     this.addSpendPercentOfBudget();

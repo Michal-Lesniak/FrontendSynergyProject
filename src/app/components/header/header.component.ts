@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Input } from '@angular/core';
+import { SafeUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -10,4 +11,5 @@ import { Input } from '@angular/core';
 export class HeaderComponent {
   @Input() extendedFunctionality:boolean = false;
   @Input() integrationName?:string;
+  @Input() imageSrc?:SafeUrl;
 }

@@ -25,10 +25,10 @@ export class DisplayIntegrationComponent implements OnInit {
   srcImage?:any;
 
   constructor(private route:ActivatedRoute, private router:Router, private integrationService: IntegrationService, private imageService:ImageService, private versionService:VersionService){
-    this.integration_id = (router.getCurrentNavigation()?.extras.state)!['id'];
+    this.integration_id = (this.router.getCurrentNavigation()?.extras.state)!['id'];
   }
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.name = this.route.snapshot.paramMap.get('name');
 
     this.integrationService.getIntegrationById(this.integration_id!).subscribe(res => {
