@@ -27,8 +27,12 @@ export class HomeComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.integrationService.getIntegrations().pipe(first()).subscribe( res => {this.integrations = res; this.setImagesToIntegration()});
+    this.integrationService.getIntegrations().pipe(first()).subscribe(res => {
+      this.integrations = res; 
+      this.setImagesToIntegration();
+    });
   }
+
 
   
 
