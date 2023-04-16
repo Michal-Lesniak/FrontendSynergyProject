@@ -5,16 +5,16 @@
             <div class="pt-8 border-b-2">
                 <h2 class="pl-20 text-[2rem] font-bold text-purple-900/80">Main Version</h2>
             </div> 
-            <app-version-view class="flex-1 flex" [version]="mainVersion" [tempView]= "false" (duplicateEvent)="addVersion($event)" ></app-version-view>
+            <app-version-view class="flex-1 flex" [version]="mainVersion" [tempView]= "false" (duplicateEvent)="addVersion($event)" (addSubCategoryEvent)="addSubCategory($event)"></app-version-view>
         </div>
         <div *ngIf="listVersion?.length === 1" class="flex-1 flex items-center justify-center">
                 <span class="text-2xl">Not Found Version To Compare</span>
         </div>
         <div *ngIf="listVersion!.length >= 2" class="flex-1 flex flex-col">
             <div class="pt-11 border-b-2">
-                <button class="focus:bg-purple-900/20 text-[1.5rem] px-2" *ngFor="let version of listVersion">{{version.name}}</button>
+                <button class="focus:bg-purple-900/20 text-[1.5rem] px-2" (click)="selected(version)" *ngFor="let version of listVersion">{{version.name}}</button>
             </div>
-            <app-version-view class="flex-1 flex" [version]="tempVersion" [tempView]="true" (duplicateEvent)="addVersion($event)"></app-version-view>
+            <app-version-view class="flex-1 flex" [version]="tempVersion" [tempView]="true" (duplicateEvent)="addVersion($event)" (addSubCategoryEvent)="addSubCategory($event)"></app-version-view>
             
         </div>
     </div>
