@@ -1,3 +1,4 @@
+import { VersionBudget } from './../../models/versionBudget';
 import { ImageService } from './../../services/image/image.service';
 import { Version } from '@angular/compiler';
 import { SubcategoryService } from './../../services/subcategory/subcategory.service';
@@ -8,19 +9,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseCategory } from 'src/app/models/expense-category';
 import { IntegrationService } from 'src/app/services/integration/integration.service';
 import { Integration } from 'src/app/models/integration';
-import { concatMap, take } from 'rxjs';
+import { concatMap, firstValueFrom, take } from 'rxjs';
 import { IntegrationDetail } from 'src/app/models/integration-detail';
-import { VersionBudget } from 'src/app/models/versionBudget';
 import { SafeUrl } from '@angular/platform-browser';
 import { MatInput } from '@angular/material/input';
 import { MatProgressBar } from '@angular/material/progress-bar';
 
-
-export interface subcategory {
-  name: string,
-  cost: number,
-  currentExpense: number,
-}
 
 @Component({
   selector: 'app-integration-details',
@@ -58,15 +52,42 @@ export class IntegrationDetailsComponent implements OnInit {
     this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(listversion => {
       this.listVersion = listversion;
       this.mainVersion = this.listVersion[0];
-      console.log(this.listVersion);
-      console.log(this.mainVersion);
-      console.log(this.listVersion![0]!.categoryList)
+      this.tempVersion = this.listVersion[this.listVersion.length - 1];
     });
+ }
 
+  selected(version: VersionBudget) {
+    this.tempVersion = version;
   }
 
-  addVersion(version: VersionBudget) {
-    this.listVersion?.push(version);
-    this.tempVersion = version;
+  async addVersion(version: VersionBudget) {
+    try{
+        let tempVer = await firstValueFrom(this.versionService.addVersion(this.integration_id!, version));
+        version.categoryList && version.categoryList?.forEach(async category => {
+        let tempCat = await firstValueFrom(this.categoryService.addCategory(tempVer?.id!, category))
+        category.subCategoryList && category.subCategoryList.forEach(async subCategory => {
+          await firstValueFrom(this.subcategoryService.addSubcategory(tempCat.id!, subCategory));
+        })
+      });
+      this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(res => {
+        this.listVersion = res;
+        this.tempVersion = res.find(val => val.id === tempVer.id);
+        console.log(this.tempVersion);
+      }
+      );
+    }catch{
+      alert("Error while sending data to server");
+    }
+   
+    //dodaj wersje do bazy i przpisz do tempVersion
+    // this.versionService.addVersion(this.integration?.id!, version).subscribe(res => {
+    //   this.tempVersion = res;
+    // })
+  }
+
+  addSubCategory(category: ExpenseCategory) {
+    let index = this.mainVersion?.categoryList?.findIndex(x => x.id === category.id);
+    this.mainVersion!.categoryList![index!] = category;
+    console.log(this.mainVersion!.categoryList![index!])
   }
 }

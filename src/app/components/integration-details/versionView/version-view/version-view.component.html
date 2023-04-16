@@ -1,8 +1,8 @@
-<div [ngClass]="{'bg-purple-900/20': tempView}" class="flex-1 pt-12 pl-20 pr-12 flex flex-col">
+<div [ngClass]="{'bg-purple-900/10': tempView}" class="flex-1 pt-12 pl-20 pr-12 flex flex-col">
     <div class="flex flex-row justify-between">
         <div class="flex flex-row text-2xl">
             <div class="pr-4 border-r">
-                <input #myInput [ngClass]="{'border-b': !inputNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 5" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="inputNameVersion" value="Version 1"/>
+                <input #myInput [ngClass]="{'border-b': !inputNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 5" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="inputNameVersion" [(ngModel)]="version!.name"/>
             </div>
             <button class="px-2" (click)="inputNameVersion = !inputNameVersion" ><mat-icon class="text-purple-900/80">create</mat-icon></button>
         </div>
@@ -14,18 +14,48 @@
         <div class="absolute w-full h-full text-bold flex items-center justify-center text-white">{{version?.percentOfSpendBudget}}%</div>
         <div [style.width]="version?.percentOfSpendBudget" class="h-8 bg-purple-900/80"></div>
     </div>
-    <div class="flex-1 bg-slate-200 rounded shadow flex flex-col my-10">
-        <div class="flex flex-row p-2" *ngFor="let item of version?.categoryList">
-            <button class="p-3" (click)="showSubCategory = !showSubCategory" ><mat-icon>expand_more</mat-icon></button>
-            <div class="flex-1 grid grid-rows-2">
-                <div class="flex flex-rows justify-between">
-                    <div>{{item.name}}</div>
-                    <div>{{item.spendPercentOfBudgetCategory}}% ({{item.fullCost * item.spendPercentOfBudgetCategory/100}} / {{item.fullCost}}e)</div>
+    <div class="flex-1 rounded shadow-xl flex flex-col my-10">
+        <div class="flex flex-col" *ngFor="let item of version?.categoryList">
+            <div [ngClass]="{'bg-gray-100':item.showSubcategory}" class="flex flex-row p-2">
+                <button class="p-3" (click)="item.showSubcategory = !item.showSubcategory" >
+                    <mat-icon *ngIf="!item.showSubcategory">expand_more</mat-icon>
+                    <mat-icon *ngIf="item.showSubcategory">expand_less</mat-icon></button>
+                <div class="flex-1 grid grid-rows-2">
+                    <div class="flex flex-rows justify-between">
+                        <div>{{item.name}}</div>
+                        <div>{{item.spendPercentOfBudgetCategory}}% ({{item.fullCost * item.spendPercentOfBudgetCategory/100}} / {{item.fullCost}}e)</div>
+                    </div>
+                    <mat-progress-bar mode="determinate" value={{item.spendPercentOfBudgetCategory}}></mat-progress-bar>
                 </div>
-                <mat-progress-bar mode="determinate" value={{item.spendPercentOfBudgetCategory}}></mat-progress-bar>
+                <button (click)="item.showSubcategory = true" class="p-3 text-purple-900/80"><mat-icon>add_circle</mat-icon></button>
             </div>
-            <button class="p-3 text-purple-900/80"><mat-icon>add_circle</mat-icon></button>
+            <div *ngIf="item.showSubcategory" class="flex flex-col bg-gray-100">
+                <div class="flex flex-row w-full px-12">
+                    <div class="flex flex-col m-2">
+                        <label>Name:</label>
+                        <input size="15" type="text" class="p-1" [(ngModel)]="nameSubCategory">
+                    </div>
+                    <div class="flex flex-col m-2">
+                        <label>Cost:</label>
+                        <input size="7" type="text" class="p-1" [(ngModel)]="costSubCategory">
+                    </div>
+                    <div class="flex-1 flex items-end justify-end ">
+                        <button (click)="addSubCategory(item)" class="rounded px-6 m-2 bg-purple-900/20 hover:bg-purple-900/80">Add</button>
+                    </div>
+                </div>
+                <div *ngFor="let subCategory of item.subCategoryList" class="flex flex-row px-14 py-2">
+                    <div class="flex-1 text-bold">
+                        {{ subCategory.name }}
+                    </div>
+                    <div class="flex-1 text-bold">
+                        {{ subCategory.cost}}
+                    </div>
+                    <button>	<mat-icon>create</mat-icon></button>
+                    <button><mat-icon>delete</mat-icon></button>
+                </div>
+                
+            </div>
         </div>
-        <div *ngIf="showSubCategory" class="h-24 bg-purple-900"></div>
+        
     </div>
 </div>
