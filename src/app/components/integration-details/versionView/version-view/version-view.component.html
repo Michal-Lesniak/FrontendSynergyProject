@@ -2,9 +2,9 @@
     <div class="flex flex-row justify-between">
         <div class="flex flex-row text-2xl">
             <div class="pr-4 border-r">
-                <input #myInput [ngClass]="{'border-b': !inputNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 3" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="inputNameVersion" [(ngModel)]="version!.name"/>
+                <input #myInput [ngClass]="{'border-b': !enableChangeNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 3" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="enableChangeNameVersion" [(ngModel)]="version!.name"/>
             </div>
-            <button class="px-2" (click)="inputNameVersion = !inputNameVersion" ><mat-icon class="text-purple-900/80">create</mat-icon></button>
+            <button class="px-2" (click)="enableChangeNameVersion = !enableChangeNameVersion" ><mat-icon class="text-purple-900/80">create</mat-icon></button>
         </div>
         <div class="flex flex-row">
             <div class="flex items-center">
@@ -31,7 +31,7 @@
                 <div class="flex-1 grid grid-rows-2">
                     <div class="flex flex-rows justify-between">
                         <div>{{item.name}}</div>
-                        <div>{{item.spendPercentOfBudgetCategory}}% ({{item.fullCost * item.spendPercentOfBudgetCategory/100}} / {{item.fullCost}}e)</div>
+                        <div>{{item.spendPercentOfBudgetCategory | number:'1.2-2'}}% ({{item.fullCost * item.spendPercentOfBudgetCategory/100 | number:'1.2-2'}} / {{item.fullCost}}e)</div>
                     </div>
                     <mat-progress-bar mode="determinate" value={{item.spendPercentOfBudgetCategory}}></mat-progress-bar>
                 </div>
@@ -41,14 +41,14 @@
                 <div class="flex flex-row w-full px-12">
                     <div class="flex flex-col m-2">
                         <label>Name:</label>
-                        <input size="15" type="text" class="p-1" [(ngModel)]="nameSubCategory">
+                        <input size="15" type="text" class="p-1" [(ngModel)]="item.nameSubCategory">
                     </div>
                     <div class="flex flex-col m-2">
                         <label>Cost:</label>
-                        <input size="7" type="text" class="p-1" [(ngModel)]="costSubCategory">
+                        <input size="7" type="text" class="p-1" [(ngModel)]="item.costSubCategory">
                     </div>
                     <div class="flex-1 flex items-end justify-end ">
-                        <button (click)="addSubCategory(item)" class="rounded px-6 m-2 bg-purple-900/20 hover:bg-purple-900/80">Add</button>
+                        <button [disabled]="item.nameSubCategory?.length == 0 || item.costSubCategory == undefined" (click)="addSubCategory(item)" class="disabled:bg-gray-200 rounded px-6 m-2 bg-purple-900/20 hover:bg-purple-900/80">Add</button> 
                     </div>
                 </div>
                 <div *ngFor="let subCategory of item.subCategoryList" class="flex flex-row px-14 py-2">
@@ -58,7 +58,7 @@
                     <div class="flex-1 text-bold">
                         {{ subCategory.cost}}
                     </div>
-                    <button>	<mat-icon>create</mat-icon></button>
+                    <button><mat-icon>create</mat-icon></button>
                     <button><mat-icon>delete</mat-icon></button>
                 </div>
                 

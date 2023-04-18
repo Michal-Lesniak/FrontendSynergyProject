@@ -19,10 +19,7 @@ export class VersionViewComponent{
   @Output() setMainVersionEvent = new EventEmitter<VersionBudget>();
   @Output() deleteVersionEvent = new EventEmitter<VersionBudget>();
 
-  inputNameVersion:boolean = true;
-  nameSubCategory: string = "";
-  costSubCategory?: number;
-
+  enableChangeNameVersion:boolean = true;
 
   duplicateVersion(){
     this.duplicateEvent.emit(this.version);
@@ -32,12 +29,16 @@ export class VersionViewComponent{
   addSubCategory(current_category:ExpenseCategory){
     
     current_category && current_category.subCategoryList!.push({
-      name: this.nameSubCategory,
-      cost: this.costSubCategory!
+      name: current_category.nameSubCategory!,
+      cost: current_category.costSubCategory!
     })
+    current_category.spendPercentOfBudgetCategory = 0;
+    current_category.subCategoryList!.forEach(element => {
+            current_category.spendPercentOfBudgetCategory += element.cost/current_category.fullCost * 100;
+    });
     console.log(current_category);
-    this.nameSubCategory = '';
-    this.costSubCategory = undefined;
+    current_category.nameSubCategory = '';
+    current_category.costSubCategory = undefined;
     this.addSubCategoryEvent.emit(current_category);
   }
 
@@ -48,4 +49,6 @@ export class VersionViewComponent{
   deleteVersion(){
     this.deleteVersionEvent.emit(this.version);
   }
+
+
 }

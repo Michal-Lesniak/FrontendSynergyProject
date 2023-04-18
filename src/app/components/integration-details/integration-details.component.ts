@@ -102,4 +102,6 @@ export class IntegrationDetailsComponent implements OnInit {
     this.mainVersion!.categoryList![index!] = category;
     console.log(this.mainVersion!.categoryList![index!])
   }
+
+  
 }
