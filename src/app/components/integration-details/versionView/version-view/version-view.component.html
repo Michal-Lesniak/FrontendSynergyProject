@@ -2,14 +2,22 @@
     <div class="flex flex-row justify-between">
         <div class="flex flex-row text-2xl">
             <div class="pr-4 border-r">
-                <input #myInput [ngClass]="{'border-b': !inputNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 5" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="inputNameVersion" [(ngModel)]="version!.name"/>
+                <input #myInput [ngClass]="{'border-b': !inputNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 3" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="inputNameVersion" [(ngModel)]="version!.name"/>
             </div>
             <button class="px-2" (click)="inputNameVersion = !inputNameVersion" ><mat-icon class="text-purple-900/80">create</mat-icon></button>
         </div>
-        <div>
-            <button (click)="duplicateVersion()" class="px-4 py-1  text-white rounded bg-purple-900/80">Duplicate</button>
+        <div class="flex flex-row">
+            <div class="flex items-center">
+                <button (click)="setMainVersion()" class="scale-125 mt-1 px-2" *ngIf="tempView"><mat-icon>star_border</mat-icon></button>
+            </div>
+            <div>
+                <button (click)="duplicateVersion()" class="px-4 py-1  text-white rounded bg-purple-900/80">Duplicate</button>
+            </div>
+            <div *ngIf="tempView">
+                <button (click)="deleteVersion()" class="px-4 mx-2 py-1 rounded text-white bg-purple-900/80">Delete</button>
+            </div>
         </div>
-    </div>
+    </div >
     <div class="relative w-full h-8 bg-purple-900/20 mt-6">
         <div class="absolute w-full h-full text-bold flex items-center justify-center text-white">{{version?.percentOfSpendBudget}}%</div>
         <div [style.width]="version?.percentOfSpendBudget" class="h-8 bg-purple-900/80"></div>

@@ -16,7 +16,8 @@ export class VersionViewComponent{
   @Input() tempView?: Boolean;
   @Output() duplicateEvent = new EventEmitter<VersionBudget>();
   @Output() addSubCategoryEvent = new EventEmitter<ExpenseCategory>();
-  
+  @Output() setMainVersionEvent = new EventEmitter<VersionBudget>();
+  @Output() deleteVersionEvent = new EventEmitter<VersionBudget>();
 
   inputNameVersion:boolean = true;
   nameSubCategory: string = "";
@@ -40,4 +41,11 @@ export class VersionViewComponent{
     this.addSubCategoryEvent.emit(current_category);
   }
 
+  setMainVersion(){
+    this.setMainVersionEvent.emit(this.version);
+  }
+
+  deleteVersion(){
+    this.deleteVersionEvent.emit(this.version);
+  }
 }

@@ -25,7 +25,7 @@ export class IntegrationDetailsComponent implements OnInit {
 
   integration_id?: number;
   integration?: IntegrationDetail;
-  listVersion?: Array<VersionBudget>;
+  listVersion?: Array<VersionBudget> = [];
   mainVersion?: VersionBudget;
   tempVersion?: VersionBudget;
   imageURL?: SafeUrl;
@@ -51,7 +51,7 @@ export class IntegrationDetailsComponent implements OnInit {
     });
     this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(listversion => {
       this.listVersion = listversion;
-      this.mainVersion = this.listVersion[0];
+      this.mainVersion = this.listVersion.shift();
       this.tempVersion = this.listVersion[this.listVersion.length - 1];
     });
  }
@@ -59,6 +59,21 @@ export class IntegrationDetailsComponent implements OnInit {
   selected(version: VersionBudget) {
     this.tempVersion = version;
   }
+
+  setMainVersion(version: VersionBudget){
+    this.listVersion?.push(this.mainVersion!);
+    this.listVersion = this.listVersion?.filter(val => val.id != this.tempVersion!.id);
+    this.tempVersion = this.mainVersion;
+    this.mainVersion = version;
+  }
+
+  deleteVersion(version: VersionBudget) {
+    this.versionService.deleteVersion(version.id!).subscribe(res => {
+      this.listVersion = this.listVersion?.filter(val => val.id != version.id);
+      this.tempVersion = this.listVersion![this.listVersion!.length - 1];
+    });
+  
+}
 
   async addVersion(version: VersionBudget) {
     try{
@@ -70,7 +85,9 @@ export class IntegrationDetailsComponent implements OnInit {
         })
       });
       this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(res => {
-        this.listVersion = res;
+        console.log(res);
+        this.listVersion = res.filter(val => val.id != this.mainVersion!.id);
+        console.log(this.listVersion);
         this.tempVersion = res.find(val => val.id === tempVer.id);
         console.log(this.tempVersion);
       }
@@ -78,11 +95,6 @@ export class IntegrationDetailsComponent implements OnInit {
     }catch{
       alert("Error while sending data to server");
     }
-   
-    //dodaj wersje do bazy i przpisz do tempVersion
-    // this.versionService.addVersion(this.integration?.id!, version).subscribe(res => {
-    //   this.tempVersion = res;
-    // })
   }
 
   addSubCategory(category: ExpenseCategory) {
