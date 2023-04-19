@@ -5,17 +5,18 @@
             <div class="pt-8 border-b-2">
                 <h2 class="pl-20 text-[2rem] font-bold text-purple-900/80">Main Version</h2>
             </div> 
-            <app-version-view class="flex-1 flex" [version]="mainVersion" [tempView]= "false" (duplicateEvent)="addVersion($event)" (addSubCategoryEvent)="addSubCategory($event)"></app-version-view>
+            <app-version-view class="flex-1 flex" [version]="mainVersion" [tempView]= "false" (duplicateEvent)="addVersion($event)" ></app-version-view>
         </div>
-        <div *ngIf="listVersion?.length === 1" class="flex-1 flex items-center justify-center">
+        <div *ngIf="listVersion?.length == 0" class="flex-1 flex items-center justify-center">
                 <span class="text-2xl">Not Found Version To Compare</span>
         </div>
-        <div *ngIf="listVersion!.length >= 2" class="flex-1 flex flex-col">
+        <div *ngIf="listVersion!.length >= 1" class="flex-1 flex flex-col">
             <div class="pt-14 border-b-2">
-                <button [ngClass]="{'bg-purple-900/10': version == tempVersion }" class="text-[1rem] px-2 border-x border-t" (click)="selected(version)" *ngFor="let version of listVersion">{{version.name}}</button>
+                <button [ngClass]="{'bg-purple-900/10': version == tempVersion }" class="text-[1rem] px-2 border-x border-t" 
+                (click)="selected(version)" *ngFor="let version of listVersion">{{version.name}}</button>
             </div>
-            <app-version-view class="flex-1 flex" [version]="tempVersion" [tempView]="true" (deleteVersionEvent)="deleteVersion($event)" (duplicateEvent)="addVersion($event)" (setMainVersionEvent)="setMainVersion($event)" (addSubCategoryEvent)="addSubCategory($event)"></app-version-view>
-            
+            <app-version-view class="flex-1 flex" [version]="tempVersion" [tempView]="true" (deleteVersionEvent)="deleteVersion($event)" (duplicateEvent)="addVersion($event)"
+             (setMainVersionEvent)="setMainVersion($event)"></app-version-view>  
         </div>
     </div>
 </div>

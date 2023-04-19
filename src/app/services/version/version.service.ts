@@ -24,5 +24,11 @@ export class VersionService {
     return this.http.delete<any>("http://localhost:8080/version/" + version_id);
   }
 
+  changeVersion(version: VersionBudget): Observable<any> {
+    return this.http.put<any>("http://localhost:8080/version/" + version.id,
+     JSON.stringify(version),
+     {headers: new HttpHeaders({'Content-Type': 'application/json'})});
+  }
+
 
 }

@@ -2,7 +2,8 @@
     <div class="flex flex-row justify-between">
         <div class="flex flex-row text-2xl">
             <div class="pr-4 border-r">
-                <input #myInput [ngClass]="{'border-b': !enableChangeNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 3" class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="enableChangeNameVersion" [(ngModel)]="version!.name"/>
+                <input #myInput [ngClass]="{'border-b': !enableChangeNameVersion}" [style]="" size="5" oninput="this.size = this.value.length - 3" 
+                class="font-bold focus:outline-none bg-transparent" type="text" [disabled]="enableChangeNameVersion" (change)="updateVersion()" [(ngModel)]="version!.name"/>
             </div>
             <button class="px-2" (click)="enableChangeNameVersion = !enableChangeNameVersion" ><mat-icon class="text-purple-900/80">create</mat-icon></button>
         </div>
@@ -58,8 +59,7 @@
                     <div class="flex-1 text-bold">
                         {{ subCategory.cost}}
                     </div>
-                    <button><mat-icon>create</mat-icon></button>
-                    <button><mat-icon>delete</mat-icon></button>
+                    <button (click)="deleteSubCategory(item, subCategory)"><mat-icon>delete</mat-icon></button>
                 </div>
                 
             </div>

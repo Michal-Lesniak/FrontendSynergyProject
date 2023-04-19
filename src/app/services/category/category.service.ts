@@ -15,4 +15,11 @@ export class CategoryService {
          JSON.stringify(category),
          {headers: new HttpHeaders({'Content-Type': 'application/json'})});
     }
+
+    updateCategory(updatedCategory:ExpenseCategory){
+        return this.http.put("http://localhost:8080/category/" + updatedCategory.id,
+         JSON.stringify(updatedCategory),
+         {headers: new HttpHeaders({'Content-Type': 'application/json'})});
+    }
+
 }

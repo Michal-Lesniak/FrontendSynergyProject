@@ -14,6 +14,7 @@ import { IntegrationDetail } from 'src/app/models/integration-detail';
 import { SafeUrl } from '@angular/platform-browser';
 import { MatInput } from '@angular/material/input';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { ExpenseSubCategory } from 'src/app/models/expense-sub-category';
 
 
 @Component({
@@ -72,8 +73,10 @@ export class IntegrationDetailsComponent implements OnInit {
       this.listVersion = this.listVersion?.filter(val => val.id != version.id);
       this.tempVersion = this.listVersion![this.listVersion!.length - 1];
     });
-  
-}
+  }
+
+  // getVersions(){
+  // } 
 
   async addVersion(version: VersionBudget) {
     try{
@@ -84,24 +87,32 @@ export class IntegrationDetailsComponent implements OnInit {
           await firstValueFrom(this.subcategoryService.addSubcategory(tempCat.id!, subCategory));
         })
       });
-      this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(res => {
-        console.log(res);
-        this.listVersion = res.filter(val => val.id != this.mainVersion!.id);
-        console.log(this.listVersion);
-        this.tempVersion = res.find(val => val.id === tempVer.id);
-        console.log(this.tempVersion);
-      }
-      );
+      //   this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(res => {
+      //   console.log(res);
+      //   this.listVersion = res.filter(val => val.id != this.mainVersion!.id);
+      //   console.log(this.listVersion);
+      //   this.tempVersion = res.find(val => val.id === tempVer.id);
+      //   console.log(this.tempVersion);
+      // }
+      // );
     }catch{
       alert("Error while sending data to server");
     }
   }
 
-  addSubCategory(category: ExpenseCategory) {
-    let index = this.mainVersion?.categoryList?.findIndex(x => x.id === category.id);
-    this.mainVersion!.categoryList![index!] = category;
-    console.log(this.mainVersion!.categoryList![index!])
-  }
+  // addSubCategoryMain(category: ExpenseCategory) {
+  //   let index = this.mainVersion?.categoryList?.findIndex(x => x.id === category.id);
+  //   this.mainVersion!.categoryList![index!] = category;
+  // }
 
-  
+  // addSubCategoryTemp(category: ExpenseCategory){
+  //   let index = this.tempVersion?.categoryList?.findIndex(x => x.id === category.id);
+  //   this.tempVersion!.categoryList![index!] = category;
+  // }
+
+  // deleteSubCategory(subCategory: ExpenseSubCategory) {
+  //  this.subcategoryService.deleteSubCategory(subCategory.id!).subscribe(res => {
+  //   console.log(res);
+  // })};
+
 }

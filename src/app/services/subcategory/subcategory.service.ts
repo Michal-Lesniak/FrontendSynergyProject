@@ -15,4 +15,8 @@ export class SubcategoryService {
 			JSON.stringify(subcategory),
 			{ headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
 	}
+
+	deleteSubCategory(subCategory_id: number){
+		return this.http.delete(`http://localhost:8080/subcategory/${subCategory_id}`);
+	}
 }
