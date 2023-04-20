@@ -16,5 +16,5 @@
         {{version.id}}
         {{version.percentOfSpendBudget}}
     </div>
-    <button [routerLink]="['/integration/details']" [state]="{id: integration!.id}">Edit</button>
+    <button *ngIf="integration?.id" [routerLink]="['/integration/details']" [state]="{id: integration!.id}">Edit</button>
 </div>  

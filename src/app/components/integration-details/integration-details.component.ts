@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ExpenseCategory } from 'src/app/models/expense-category';
 import { IntegrationService } from 'src/app/services/integration/integration.service';
 import { Integration } from 'src/app/models/integration';
-import { concatMap, firstValueFrom, take } from 'rxjs';
+import { concatMap, delay, firstValueFrom, forkJoin, take } from 'rxjs';
 import { IntegrationDetail } from 'src/app/models/integration-detail';
 import { SafeUrl } from '@angular/platform-browser';
 import { MatInput } from '@angular/material/input';
@@ -31,7 +31,6 @@ export class IntegrationDetailsComponent implements OnInit {
   tempVersion?: VersionBudget;
   imageURL?: SafeUrl;
 
-
   constructor(private router: Router,
     private integrationService: IntegrationService,
     private versionService: VersionService,
@@ -42,7 +41,7 @@ export class IntegrationDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.integrationService.getIntegrationById(this.integration_id!).subscribe(integration => { this.integration = integration; console.log(this.integration) });
+    this.integrationService.getIntegrationById(this.integration_id!).subscribe(integration => { this.integration = integration });
     this.imageService.getImageById(this.integration_id!).subscribe(res => {
       const reader = new FileReader();
       reader.readAsDataURL(res);
@@ -55,13 +54,13 @@ export class IntegrationDetailsComponent implements OnInit {
       this.mainVersion = this.listVersion.shift();
       this.tempVersion = this.listVersion[this.listVersion.length - 1];
     });
- }
+  }
 
   selected(version: VersionBudget) {
     this.tempVersion = version;
   }
 
-  setMainVersion(version: VersionBudget){
+  setMainVersion(version: VersionBudget) {
     this.listVersion?.push(this.mainVersion!);
     this.listVersion = this.listVersion?.filter(val => val.id != this.tempVersion!.id);
     this.tempVersion = this.mainVersion;
@@ -75,44 +74,82 @@ export class IntegrationDetailsComponent implements OnInit {
     });
   }
 
-  // getVersions(){
-  // } 
 
-  async addVersion(version: VersionBudget) {
-    try{
-        let tempVer = await firstValueFrom(this.versionService.addVersion(this.integration_id!, version));
-        version.categoryList && version.categoryList?.forEach(async category => {
-        let tempCat = await firstValueFrom(this.categoryService.addCategory(tempVer?.id!, category))
-        category.subCategoryList && category.subCategoryList.forEach(async subCategory => {
-          await firstValueFrom(this.subcategoryService.addSubcategory(tempCat.id!, subCategory));
-        })
-      });
-      //   this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(res => {
-      //   console.log(res);
-      //   this.listVersion = res.filter(val => val.id != this.mainVersion!.id);
-      //   console.log(this.listVersion);
-      //   this.tempVersion = res.find(val => val.id === tempVer.id);
-      //   console.log(this.tempVersion);
+
+  //function will add Version, first add version via VersionService, then addcategory, subcategory after all, when version is added invoke getVersionFromIntegration 
+  //to refresh listVersion
+  duplicateVersion(version: VersionBudget) {
+    try {
+      
+
+      // this.versionService.addVersion(this.integration_id!, version).pipe(
+      //   concatMap((resVersion) => {
+      //     const categoryObservables = version.categoryList?.map(category => {
+      //       return this.categoryService.addCategory(resVersion.id, category).pipe(
+      //         concatMap((resCategory) => {
+      //           const subCategoryObservables = category.subCategoryList?.map(subCategory => {
+      //             return this.subcategoryService.addSubcategory(resCategory.id!, subCategory).pipe(take(1));
+      //           }) || [];
+      //           return forkJoin(subCategoryObservables);
+      //         })
+      //       );
+      //     }) || [];
+      //     return forkJoin(categoryObservables);
+      //   }),
+      //   concatMap(() => this.versionService.getVersionFromIntegration(this.integration_id!))
+      // ).subscribe(res => console.log(res));
+
+
+
+
+
+
+      // let resVersion = await firstValueFrom(this.versionService.addVersion(this.integration_id!, version));
+      // for(let i=0;i <=  version.categoryList?.length!;i++){
+      //   let resCategory = await firstValueFrom(this.categoryService.addCategory(resVersion.id!, version.categoryList![i]));
+      //   for(let j=0;j <=  version.categoryList![i].subCategoryList?.length!;j++){
+      //     await firstValueFrom(this.subcategoryService.addSubcategory(resCategory.id!, version.categoryList![i].subCategoryList![j]));
+      //   }
       // }
-      // );
-    }catch{
+      // version.categoryList?.forEach(async category => {
+      //   let resCategory = await firstValueFrom(this.categoryService.addCategory(resVersion.id!, category));
+      //   for(let j=0;j <=  category.subCategoryList?.length!;j++){
+      //     await firstValueFrom(this.subcategoryService.addSubcategory(resCategory.id!, category.subCategoryList![i]));
+      //   }
+
+        // category.subCategoryList?.forEach(async subCategory => {
+
+        //   await firstValueFrom(this.subcategoryService.addSubcategory(resCategory.id!, subCategory)).then(res => console.log(res));
+        // })
+      // })
+      // let object = await firstValueFrom(this.versionService.getVersionFromIntegration(this.integration_id!));
+      // console.log(object);
+
+       let duplicatedVersion = JSON.parse(JSON.stringify(version));
+       this.versionService.addVersion(this.integration_id!, version).subscribe(resVersion => {
+          duplicatedVersion.id = resVersion.id;
+          version.categoryList && version.categoryList?.forEach((category, index) => {
+            this.categoryService.addCategory(resVersion.id!, category).subscribe(resCategory => {
+              duplicatedVersion.categoryList![index].id = resCategory.id;
+              category.subCategoryList && category.subCategoryList!.forEach(subCategory => {
+                this.subcategoryService.addSubcategory(resCategory.id!, subCategory).subscribe(resSubCategory => 
+                  duplicatedVersion.categoryList![index].subCategoryList![index].id = resSubCategory.id
+                )
+              })
+            })
+          })
+          this.listVersion?.push(duplicatedVersion);
+          this.tempVersion = duplicatedVersion;
+          console.log(version);
+          console.log(duplicatedVersion);
+          // this.versionService.getVersionFromIntegration(this.integration_id!).subscribe(resList => { 
+          //   this.listVersion =  resList;
+          //   this.listVersion = this.listVersion.filter(val => val.id != this.mainVersion!.id);
+          //   this.tempVersion = this.listVersion.find(val => val.id === resVersion.id);
+          // })
+        })
+    } catch {
       alert("Error while sending data to server");
     }
   }
-
-  // addSubCategoryMain(category: ExpenseCategory) {
-  //   let index = this.mainVersion?.categoryList?.findIndex(x => x.id === category.id);
-  //   this.mainVersion!.categoryList![index!] = category;
-  // }
-
-  // addSubCategoryTemp(category: ExpenseCategory){
-  //   let index = this.tempVersion?.categoryList?.findIndex(x => x.id === category.id);
-  //   this.tempVersion!.categoryList![index!] = category;
-  // }
-
-  // deleteSubCategory(subCategory: ExpenseSubCategory) {
-  //  this.subcategoryService.deleteSubCategory(subCategory.id!).subscribe(res => {
-  //   console.log(res);
-  // })};
-
 }
