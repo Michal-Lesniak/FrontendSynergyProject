@@ -34,8 +34,6 @@ export class HomeComponent implements OnInit{
   }
 
 
-  
-
   private setImagesToIntegration(): void {
     this.integrations?.forEach(integration => {
       this.imageService.getImageById(integration.id!).pipe(first()).subscribe(data => {   
@@ -52,6 +50,9 @@ export class HomeComponent implements OnInit{
       width: '800px',
       panelClass: 'mat-dialog-container',
       backdropClass: 'dialogBackground',
+      data: {
+        lastIntegration: this.integrations![this.integrations!.length - 1]
+      }
       });
   }
 }

@@ -17,6 +17,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HttpClientModule } from '@angular/common/http';
 import { DisplayIntegrationComponent } from './components/display-integration/display-integration.component';
 import { VersionViewComponent } from './components/integration-details/versionView/version-view/version-view.component';
+import { MatMenuModule} from '@angular/material/menu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GojsAngularModule } from 'gojs-angular';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { VersionViewComponent } from './components/integration-details/versionVi
     MatTableModule,
     FormsModule,
     MatProgressBarModule,
-    HttpClientModule
+    HttpClientModule,
+    MatMenuModule,
+    BrowserAnimationsModule,
+    GojsAngularModule
   ],
   providers: [],
   bootstrap: [AppComponent]

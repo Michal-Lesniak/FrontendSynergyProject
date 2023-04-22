@@ -29,6 +29,17 @@ export class NewIntegrationComponent implements OnInit {
     private categoryService: CategoryService,
     private imageService: ImageService,
     private router: Router) {
+    if (this.router.getCurrentNavigation()?.extras.state!['integration'] != undefined){
+      this.integration = this.router.getCurrentNavigation()?.extras.state!['integration'];
+      this.version = this.router.getCurrentNavigation()?.extras.state!['integration'].versionList[0];
+      sessionStorage.setItem("integrationName", this.integration.name);
+      sessionStorage.setItem("integrationBudget", JSON.stringify(this.integration.budget));
+      sessionStorage.setItem("integrationNoParticipant", JSON.stringify(this.integration.noOfMembers));
+      sessionStorage.setItem("versionName", this.version.name);
+      sessionStorage.setItem("listCategory", JSON.stringify(this.version.categoryList));
+    }
+     
+    console.log(this.integration);
   }
 
   @ViewChild(MatTable) table?: MatTable<any>;
@@ -50,6 +61,8 @@ export class NewIntegrationComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+
     if (sessionStorage.getItem('listCategory') !== null) {
       this.listCategory = JSON.parse(sessionStorage.getItem("listCategory")!);
       console.log(this.listCategory);
@@ -79,6 +92,8 @@ export class NewIntegrationComponent implements OnInit {
     if (this.srcImage != null) {
       this.fileSelected = true;
     }
+
+    console.log(this.integration);
   }
 
 
