@@ -15,13 +15,13 @@ The idea for this project was taken from workshop.
 ## Screenshots
 The diffrence look between mobile view and computer view.
 <p align="center">
-  <img src="screenshots/home2.png" width="500px" alt="">
-  <img src="screenshots/home.png" width="500px" alt="">
+  <img src="screenshots/home2.png" width="300px" alt="">
+  <img src="screenshots/home.png" width="300px" alt="">
 </p>
 
 <p align="center">
-  <img src="screenshots/newIntegraion2.png" width="500px" alt="">
-  <img src="screenshots/newIntegration.png" width="500px" alt="">
+  <img src="screenshots/newIntegraion2.png" width="300px" alt="">
+  <img src="screenshots/newIntegration.png" width="300px" alt="">
 </p>
 
 <p align="center">
