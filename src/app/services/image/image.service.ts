@@ -23,4 +23,8 @@ export class ImageService {
 		return this.http.post(`http://localhost:8080/integration/${integration_id}/image`,fileImage);
 	}
 
+	deleteImage(id: number) {
+		return this.http.delete(`http://localhost:8080/image/${id}`);
+	}
+
 }

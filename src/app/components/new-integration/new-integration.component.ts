@@ -217,12 +217,13 @@ export class NewIntegrationComponent implements OnInit {
     }
   }
 
-  allowCreate(): Boolean {
+  disableCreate(): Boolean {
     if (this.integration &&
       this.listCategory &&
       !this.integration.name ||
       this.listCategory!.length <= 0 ||
       !this.version.name ||
+      this.srcImage == null ||
       this.integration.budget <= 0 ||
       this.integration.noOfMembers <= 0) {
       return true;

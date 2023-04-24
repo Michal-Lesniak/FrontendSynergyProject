@@ -89,6 +89,6 @@
     </div>
     <div class="flex justify-between mt-1 sm:mt-3">
         <button routerLink="/home" class="m-3 sm:ml-12 p-3 rounded bg-purple-900/80 text-white flex items-center" ><mat-icon class="text-white">navigate_before</mat-icon>Back</button>
-        <button  (click)="createIntegrationAndNavigateToNextView()" [disabled]="allowCreate()" class="m-3 sm:mr-12 p-3 rounded disabled:bg-purple-900/10 bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
+        <button  (click)="createIntegrationAndNavigateToNextView()" [disabled]="disableCreate()" class="m-3 sm:mr-12 p-3 rounded disabled:bg-purple-900/10 bg-purple-900/80 text-white flex items-center" >Create<mat-icon class="text-white">navigate_next</mat-icon></button>
     </div>
 </div>

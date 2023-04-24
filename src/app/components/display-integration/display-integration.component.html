@@ -1,6 +1,7 @@
 <div class="h-screen flex-1 flex flex-col">
     <app-header [extendedFunctionality]="true" [isDisplayPage]="true" [integrationId]="integration?.id"></app-header>
-    <div class="flex flex-1 items-center m-4 sm:m-16 rounded shadow-2xl z-10 flex-col">
+    <div class="flex flex-1 items-center m-4 sm:m-16 rounded shadow-2xl z-10 flex-col relative">
+        <button (click)="deleteIntegration()" class="bg-purple-900/20 hover:bg-purple-900/80 text-white rounded absolute bottom-2 sm:bottom-auto sm:top-5 sm:right-5 p-2">Delete Integration</button>
         <div class="font-bold md:text-2xl p-4 border-purple-800 border-b-2">
             {{integration?.name}}
         </div>

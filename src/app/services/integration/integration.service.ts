@@ -26,4 +26,8 @@ export class IntegrationService {
 		return this.http.post(this.IntegrationsApiUrl, JSON.stringify(integration), { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) });
 	}
 
+	deleteIntegration(id: number): Observable<any> {
+		return this.http.delete<any>("http://localhost:8080/integration/" + id );
+	};
+
 }
