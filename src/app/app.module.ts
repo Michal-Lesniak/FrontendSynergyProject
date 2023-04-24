@@ -19,7 +19,7 @@ import { DisplayIntegrationComponent } from './components/display-integration/di
 import { VersionViewComponent } from './components/integration-details/versionView/version-view/version-view.component';
 import { MatMenuModule} from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { GojsAngularModule } from 'gojs-angular';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
@@ -44,9 +44,11 @@ import { GojsAngularModule } from 'gojs-angular';
     HttpClientModule,
     MatMenuModule,
     BrowserAnimationsModule,
-    GojsAngularModule
+    MatTabsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [
+  ]
 })
 export class AppModule { }

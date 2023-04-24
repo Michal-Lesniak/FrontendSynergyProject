@@ -10,6 +10,7 @@ import { SafeUrl } from '@angular/platform-browser';
 })
 export class HeaderComponent {
   @Input() extendedFunctionality:boolean = false;
+  @Input() isDisplayPage:boolean = false;
   @Input() integrationName?:string;
   @Input() integrationId?:number;
   @Input() imageSrc?:SafeUrl;

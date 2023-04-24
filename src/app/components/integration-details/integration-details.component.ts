@@ -65,6 +65,7 @@ export class IntegrationDetailsComponent implements OnInit {
     this.listVersion = this.listVersion?.filter(val => val.id != this.tempVersion!.id);
     this.tempVersion = this.mainVersion;
     this.mainVersion = version;
+    
   }
 
   deleteVersion(version: VersionBudget) {
