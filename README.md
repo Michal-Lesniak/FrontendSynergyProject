@@ -25,18 +25,18 @@ The diffrence look between mobile view and computer view.
 </p>
 
 <p align="center">
-  <img src="screenshots/newDetail.png" width="500px" alt="">
-  <img src="screenshots/newDetail2.png" width="500px" alt="">
+  <img src="screenshots/newDetail.png" width="300px" alt="">
+  <img src="screenshots/newDetail2.png" width="300px" alt="">
 </p>
 
 <p align="center">
-  <img src="screenshots/summary.png" width="500px" alt="">
-  <img src="screenshots/summary2.png" width="500px" alt="">
+  <img src="screenshots/summary.png" width="300px" alt="">
+  <img src="screenshots/summary2.png" width="300px" alt="">
 </p>
 
 <p align="center">
-  <img src="screenshots/newDetail3.png" width="500px" alt="">
-  <img src="screenshots/newDetail4.png" width="500px" alt="">
+  <img src="screenshots/newDetail3.png" width="300px" alt="">
+  <img src="screenshots/newDetail4.png" width="300px" alt="">
 </p>
 
 
