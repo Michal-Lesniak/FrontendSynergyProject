@@ -8,7 +8,8 @@
         <button mat-icon-button [matMenuTriggerFor]="menu" class="sm:hidden"><mat-icon>menu</mat-icon></button>
         <mat-menu #menu="matMenu">
             <button routerLink="/home" mat-menu-item>Home Page</button>
-            <button (click)="summarize()"  mat-menu-item>Summarize</button>
+            <button (click)="summarize()" *ngIf="!isDisplayPage" [routerLink]="['/', this.integrationName]" [state]="{id: integrationId}" mat-menu-item>Summarize</button>
+            <button *ngIf="isDisplayPage&&integrationId" [routerLink]="['/integration/details']" [state]="{id: integrationId}"  mat-menu-item>Edit</button>
         </mat-menu>
         <button (click)="summarize()" *ngIf="!isDisplayPage" class="hidden sm:flex text-sm px-5 py-1 rounded bg-purple-900/80 text-white items-center justify-center"
             [routerLink]="['/', this.integrationName]" [state]="{id: integrationId}">Summarize
