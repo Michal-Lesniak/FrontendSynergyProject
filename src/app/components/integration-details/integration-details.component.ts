@@ -6,7 +6,7 @@ import { VersionService } from './../../services/version/version.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IntegrationService } from 'src/app/services/integration/integration.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin, take } from 'rxjs';
 import { IntegrationDetail } from 'src/app/models/integration-detail';
 import { SafeUrl } from '@angular/platform-browser';
 
@@ -75,13 +75,13 @@ export class IntegrationDetailsComponent implements OnInit {
   duplicateVersion(version: VersionBudget) {
     try {
        let duplicatedVersion = JSON.parse(JSON.stringify(version));
-       this.versionService.addVersion(this.integration_id!, version).subscribe(resVersion => {
+       this.versionService.addVersion(this.integration_id!, version).pipe(take(1)).subscribe(resVersion => {
           duplicatedVersion.id = resVersion.id;
           version.categoryList && version.categoryList?.forEach((category, index) => {
-            this.categoryService.addCategory(resVersion.id!, category).subscribe(resCategory => {
+            this.categoryService.addCategory(resVersion.id!, category).pipe(take(1)).subscribe(resCategory => {
               duplicatedVersion.categoryList![index].id = resCategory.id;
               category.subCategoryList && category.subCategoryList!.forEach(subCategory => {
-                this.subcategoryService.addSubcategory(resCategory.id!, subCategory).subscribe(resSubCategory => 
+                this.subcategoryService.addSubcategory(resCategory.id!, subCategory).pipe(take(1)).subscribe(resSubCategory => 
                   duplicatedVersion.categoryList![index].subCategoryList![index].id = resSubCategory.id
                 )
               })

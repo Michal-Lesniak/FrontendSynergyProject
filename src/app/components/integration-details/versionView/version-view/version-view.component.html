@@ -46,7 +46,7 @@
                                 {{item.fullCost}}e)</div>
                         </div>
                     </div>
-                    <mat-progress-bar mode="determinate" value={{item.spendPercentOfBudgetCategory}}></mat-progress-bar>
+                    <mat-progress-bar mode="determinate" value={{item.spendPercentOfBudgetCategory}} [ngClass]="{'mat-warn': item.spendPercentOfBudgetCategory > 100}"></mat-progress-bar>
                 </div>
                 <button (click)="item.showSubcategory = true"
                     class="p-3 text-purple-900/80"><mat-icon>add_circle</mat-icon></button>

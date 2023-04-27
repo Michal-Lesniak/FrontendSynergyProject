@@ -123,11 +123,11 @@ export class NewIntegrationComponent implements OnInit {
       this.integration = await firstValueFrom(this.integrationService.addIntegration(this.integration));
       this.version = await firstValueFrom(this.versionService.addVersion(this.integration.id!, this.version!));
       await firstValueFrom(this.imageService.addImage(this.integration.id!, this.fileImage!));
-      this.listCategory?.forEach(async val => {
-        await firstValueFrom(this.categoryService.addCategory(this.version.id!, val));
-      });
-      this.router.navigate(['/integration/details'], { state: { id: this.integration.id } });
-      sessionStorage.clear();
+      forkJoin(this.listCategory!.map(val => this.categoryService.addCategory(this.version.id!, val))).pipe(take(1)).subscribe(() => {
+        this.router.navigate(['/integration/details'], { state: { id: this.integration.id } });
+        sessionStorage.clear();
+      }
+      )
     } catch {
       alert("Error while sending data to server");
     }
