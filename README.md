@@ -1,6 +1,6 @@
 # SynergyProject
 
-Frontend Aplication which make easier to create integration Budget for companies.
+Frontend application designed to streamline the process of creating and managing budgets for compies integration.
 The idea for this project was taken from workshop.
 
 ## TechStack
